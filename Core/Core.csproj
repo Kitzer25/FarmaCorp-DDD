@@ -7,10 +7,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Entities\" />
-      <Folder Include="Errors\" />
+      <Folder Include="DTO's\" />
       <Folder Include="Ports\" />
-      <Folder Include="ValueObjects\" />
     </ItemGroup>
 
 </Project>
