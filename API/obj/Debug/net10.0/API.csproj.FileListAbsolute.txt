@@ -134,3 +134,6 @@ K:\Elementos\Rider\Proyecto\FarmaCorp\API\bin\Debug\net10.0\ru\Microsoft.CodeAna
 K:\Elementos\Rider\Proyecto\FarmaCorp\API\bin\Debug\net10.0\tr\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
 K:\Elementos\Rider\Proyecto\FarmaCorp\API\bin\Debug\net10.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
 K:\Elementos\Rider\Proyecto\FarmaCorp\API\bin\Debug\net10.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
+K:\Elementos\Rider\Proyecto\FarmaCorp\API\bin\Debug\net10.0\Swashbuckle.AspNetCore.Swagger.dll
+K:\Elementos\Rider\Proyecto\FarmaCorp\API\bin\Debug\net10.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+K:\Elementos\Rider\Proyecto\FarmaCorp\API\bin\Debug\net10.0\Swashbuckle.AspNetCore.SwaggerUI.dll
