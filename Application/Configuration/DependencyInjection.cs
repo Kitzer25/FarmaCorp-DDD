@@ -1,5 +1,6 @@
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
+using Application.Auth.Services;
 
 namespace Application.Configuration;
 
@@ -13,6 +14,7 @@ public static class DependencyInjection
         );
         
         //Inyección de Dependencias
+        services.AddScoped<JwtTokenGenerator>();
         
         return services;
     }

@@ -1,10 +1,13 @@
 using System.Text;
+using Application.Configuration;
 using Infraestructure.Configuration;
 using Infraestructure.Persistence;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
+
+DotNetEnv.Env.Load("../.env");
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -52,6 +55,7 @@ builder.Services.AddAuthorization(options =>
 /*
  * Inyección de Dependencias
  */
+builder.Services.AddApplication();
 builder.Services.Addinfraestructure();
 
 
@@ -89,12 +93,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-/* JWT Inicialización
+app.UseHttpsRedirection();
+
+/* JWT Inicialización */
 app.UseAuthentication();
 app.UseAuthorization();
-*/
-
-app.UseHttpsRedirection();
 app.MapControllers(); //Swagger
 
 app.Run();
