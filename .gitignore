@@ -1,0 +1,21 @@
+# Entorno
+.env
+.env.local
+.env.development
+.env.production
+
+# .NET
+bin/
+obj/
+.vs/
+*.user
+*.suo
+
+# JetBrains Rider / IntelliJ
+.idea/
+
+# Visual Studio Code opcional
+.vscode/
+
+# Logs
+*.log
