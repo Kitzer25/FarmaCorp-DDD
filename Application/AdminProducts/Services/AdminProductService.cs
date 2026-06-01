@@ -1,5 +1,6 @@
 using System.Text;
 using Application.AdminProducts.Dtos;
+using Application.Audit.Services;
 using Core.Entities;
 using Core.Ports;
 
@@ -8,10 +9,12 @@ namespace Application.AdminProducts.Services;
 public class AdminProductService : IAdminProductService
 {
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IAuditService _auditService;
 
-    public AdminProductService(IUnitOfWork unitOfWork)
+    public AdminProductService(IUnitOfWork unitOfWork, IAuditService auditService)
     {
         _unitOfWork = unitOfWork;
+        _auditService = auditService;
     }
 
     public async Task<ProductAdminDto> CreateAsync(SaveProductAdminDto request, CancellationToken ct)
@@ -39,6 +42,7 @@ public class AdminProductService : IAdminProductService
         };
 
         await _unitOfWork.ProductRepo.AddAsync(product, ct);
+        await _auditService.RegisterAsync("products", product.product_id.ToString(), "CREATE", null, ToDto(product), null, null, ct);
 
         return ToDto(product);
     }
@@ -57,6 +61,7 @@ public class AdminProductService : IAdminProductService
         var slug = BuildSlug(request);
         await EnsureSlugAvailableAsync(slug, productId, ct);
 
+        var before = ToDto(product);
         product.name = request.Name.Trim();
         product.generic_name = request.GenericName;
         product.description = request.Description;
@@ -71,6 +76,7 @@ public class AdminProductService : IAdminProductService
         product.updated_at = DateTime.UtcNow;
 
         await _unitOfWork.ProductRepo.UpdateAsync(product.product_id, product, ct);
+        await _auditService.RegisterAsync("products", product.product_id.ToString(), "UPDATE", before, ToDto(product), null, null, ct);
 
         return ToDto(product);
     }
@@ -84,11 +90,13 @@ public class AdminProductService : IAdminProductService
             throw new InvalidOperationException("El producto no existe.");
         }
 
+        var before = ToDto(product);
         product.is_active = false;
         product.deleted_at = DateTime.UtcNow;
         product.updated_at = DateTime.UtcNow;
 
         await _unitOfWork.ProductRepo.UpdateAsync(product.product_id, product, ct);
+        await _auditService.RegisterAsync("products", product.product_id.ToString(), "SOFT_DELETE", before, ToDto(product), null, null, ct);
     }
 
     private async Task EnsureSlugAvailableAsync(string slug, int? currentProductId, CancellationToken ct)

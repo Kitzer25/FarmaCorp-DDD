@@ -1,4 +1,5 @@
 using Application.Prescriptions.Dtos;
+using Application.Audit.Services;
 using Core.Entities;
 using Core.Ports;
 
@@ -7,10 +8,12 @@ namespace Application.Prescriptions.Services;
 public class PrescriptionService : IPrescriptionService
 {
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IAuditService _auditService;
 
-    public PrescriptionService(IUnitOfWork unitOfWork)
+    public PrescriptionService(IUnitOfWork unitOfWork, IAuditService auditService)
     {
         _unitOfWork = unitOfWork;
+        _auditService = auditService;
     }
 
     public async Task<PrescriptionDto> CreateAsync(int customerId, CreatePrescriptionDto request, CancellationToken ct)
@@ -52,6 +55,7 @@ public class PrescriptionService : IPrescriptionService
             throw new InvalidOperationException("La receta no existe.");
         }
 
+        var before = ToDto(prescription);
         prescription.is_verified = request.Approve;
         prescription.verified_by_user_id = userId;
         prescription.verified_at = DateTime.UtcNow;
@@ -60,6 +64,15 @@ public class PrescriptionService : IPrescriptionService
         prescription.updated_at = DateTime.UtcNow;
 
         await _unitOfWork.PrescriptionUploadRepo.UpdateAsync(prescription.prescription_id, prescription, ct);
+        await _auditService.RegisterAsync(
+            "prescription_uploads",
+            prescription.prescription_id.ToString(),
+            request.Approve ? "APPROVE" : "REJECT",
+            before,
+            ToDto(prescription),
+            userId,
+            prescription.customer_id,
+            ct);
 
         return ToDto(prescription);
     }

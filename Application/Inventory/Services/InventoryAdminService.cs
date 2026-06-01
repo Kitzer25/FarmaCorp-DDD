@@ -1,4 +1,5 @@
 using Application.Inventory.Dtos;
+using Application.Audit.Services;
 using Core.Entities;
 using Core.Ports;
 
@@ -7,10 +8,12 @@ namespace Application.Inventory.Services;
 public class InventoryAdminService : IInventoryAdminService
 {
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IAuditService _auditService;
 
-    public InventoryAdminService(IUnitOfWork unitOfWork)
+    public InventoryAdminService(IUnitOfWork unitOfWork, IAuditService auditService)
     {
         _unitOfWork = unitOfWork;
+        _auditService = auditService;
     }
 
     public async Task<IEnumerable<InventoryItemDto>> GetInventoryAsync(CancellationToken ct)
@@ -43,6 +46,7 @@ public class InventoryAdminService : IInventoryAdminService
             throw new InvalidOperationException("El movimiento dejaría stock negativo.");
         }
 
+        var previousQuantity = inventory.quantity_on_hand;
         inventory.quantity_on_hand = newQuantity;
         inventory.last_updated_at = DateTime.UtcNow;
 
@@ -59,6 +63,16 @@ public class InventoryAdminService : IInventoryAdminService
             notes = request.Notes,
             created_at = DateTime.UtcNow
         }, ct);
+
+        await _auditService.RegisterAsync(
+            "inventory",
+            inventory.inventory_id.ToString(),
+            "STOCK_MOVEMENT",
+            new { quantity_on_hand = previousQuantity },
+            new { quantity_on_hand = newQuantity, movement_type = type.name, request.Quantity },
+            userId,
+            null,
+            ct);
 
         var updated = await _unitOfWork.InventoryRepo.GetByProductVariantIdAsync(request.ProductVariantId, ct)
             ?? inventory;

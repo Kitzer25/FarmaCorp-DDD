@@ -1,4 +1,5 @@
 using Application.Orders.Dtos;
+using Application.Audit.Services;
 using Core.Entities;
 using Core.Ports;
 
@@ -8,10 +9,12 @@ public class OrderService : IOrderService
 {
     private const decimal TaxRate = 0.18m;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IAuditService _auditService;
 
-    public OrderService(IUnitOfWork unitOfWork)
+    public OrderService(IUnitOfWork unitOfWork, IAuditService auditService)
     {
         _unitOfWork = unitOfWork;
+        _auditService = auditService;
     }
 
     public async Task<string> GenerateOrderNumberAsync(CancellationToken ct)
@@ -143,6 +146,7 @@ public class OrderService : IOrderService
             throw new InvalidOperationException("El estado de pedido no está disponible.");
         }
 
+        var previousStatusId = order.order_status_id;
         order.order_status_id = statusId;
         order.updated_at = DateTime.UtcNow;
 
@@ -155,6 +159,16 @@ public class OrderService : IOrderService
             notes = notes,
             created_at = DateTime.UtcNow
         }, ct);
+
+        await _auditService.RegisterAsync(
+            "orders",
+            order.order_id.ToString(),
+            "STATUS_CHANGE",
+            new { order_status_id = previousStatusId },
+            new { order_status_id = statusId, notes },
+            changedByUserId,
+            null,
+            ct);
 
         var updated = await _unitOfWork.OrderRepo.GetByIdWithDetailsAsync(orderId, ct)
             ?? order;
