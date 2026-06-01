@@ -17,7 +17,9 @@ public interface IUnitOfWork : IDisposable
     public IProductVariantRepository ProductVariantRepo { get; }
     public IProductBatchRepository ProductBatchRepo { get; }
 
+    public ICartRepository CartRepo { get; }
     public IInventoryRepository InventoryRepo { get; }
+    public IInventoryMovementTypeRepository InventoryMovementTypeRepo { get; }
     public IInventoryMovementRepository InventoryMovementRepo { get; }
 
     public IOrderRepository OrderRepo { get; }
@@ -29,6 +31,7 @@ public interface IUnitOfWork : IDisposable
     public ICustomerRepository CustomerRepo { get; }
     public ICustomerAddressRepository CustomerAddressRepo { get; }
     public ICartItemRepository CartItemRepo { get; }
+    public IPrescriptionUploadRepository PrescriptionUploadRepo { get; }
 
     public IPromotionRepository PromotionRepo { get; }
     public IPromotionCodeRepository PromotionCodeRepo { get; }

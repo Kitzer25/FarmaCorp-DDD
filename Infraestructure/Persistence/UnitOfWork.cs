@@ -23,7 +23,9 @@ public class UnitOfWork : IUnitOfWork
         ProductCategoryRepo = new ProductCategoryRepository(_context);
         ProductVariantRepo = new ProductVariantRepository(_context);
         ProductBatchRepo = new ProductBatchRepository(_context);
+        CartRepo = new CartRepository(_context);
         InventoryRepo = new InventoryRepository(_context);
+        InventoryMovementTypeRepo = new InventoryMovementTypeRepository(_context);
         InventoryMovementRepo = new InventoryMovementRepository(_context);
         OrderRepo = new OrderRepository(_context);
         OrderItemRepo = new OrderItemRepository(_context);
@@ -32,6 +34,7 @@ public class UnitOfWork : IUnitOfWork
         CustomerRepo = new CustomerRepository(_context);
         CustomerAddressRepo = new CustomerAddressRepository(_context);
         CartItemRepo = new CartItemRepository(_context);
+        PrescriptionUploadRepo = new PrescriptionUploadRepository(_context);
         PromotionRepo = new PromotionRepository(_context);
         PromotionCodeRepo = new PromotionCodeRepository(_context);
     }
@@ -42,7 +45,9 @@ public class UnitOfWork : IUnitOfWork
     public IProductCategoryRepository ProductCategoryRepo { get; }
     public IProductVariantRepository ProductVariantRepo { get; }
     public IProductBatchRepository ProductBatchRepo { get; }
+    public ICartRepository CartRepo { get; }
     public IInventoryRepository InventoryRepo { get; }
+    public IInventoryMovementTypeRepository InventoryMovementTypeRepo { get; }
     public IInventoryMovementRepository InventoryMovementRepo { get; }
     public IOrderRepository OrderRepo { get; }
     public IOrderItemRepository OrderItemRepo { get; }
@@ -51,6 +56,7 @@ public class UnitOfWork : IUnitOfWork
     public ICustomerRepository CustomerRepo { get; }
     public ICustomerAddressRepository CustomerAddressRepo { get; }
     public ICartItemRepository CartItemRepo { get; }
+    public IPrescriptionUploadRepository PrescriptionUploadRepo { get; }
     public IPromotionRepository PromotionRepo { get; }
     public IPromotionCodeRepository PromotionCodeRepo { get; }
 
