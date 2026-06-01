@@ -18,6 +18,12 @@ public class CartItemRepository :
             .FirstOrDefaultAsync(ci => ci.cart_item_id == cartItemId, ct);
     }
 
+    public async Task<CartItem?> GetByCartIdAndVariantIdAsync(int cartId, int productVariantId, CancellationToken ct)
+    {
+        return await _context.cart_items
+            .FirstOrDefaultAsync(ci => ci.cart_id == cartId && ci.product_variant_id == productVariantId, ct);
+    }
+
     public async Task<int> CountByCartIdAsync(int cartId, CancellationToken ct)
     {
         return await _context.cart_items
