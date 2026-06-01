@@ -1,12 +1,24 @@
 using Core.Entities;
-using Core.Ports;
 using Core.Ports.Repositories;
-using Infraestructure.Persistence; 
+using Microsoft.EntityFrameworkCore;
+
 namespace Infraestructure.Persistence.Repositories;
+
 public class PromotionRepository : 
     GRepositories<Promotion>,
     IPromotionRepository
 { 
     public PromotionRepository(AppDbContext context) : base(context)
-    { }  
+    { }
+
+    public async Task<IEnumerable<Promotion>> GetActiveAsync(CancellationToken ct)
+    {
+        return await _context.promotions
+            .AsNoTracking()
+            .Include(p => p.discount_type)
+            .Include(p => p.promotion_codes)
+            .Where(p => p.is_active)
+            .OrderByDescending(p => p.created_at)
+            .ToListAsync(ct);
+    }
 }

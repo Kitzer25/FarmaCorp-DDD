@@ -14,7 +14,17 @@ public class InventoryRepository :
     public async Task<Inventory?> GetByProductVariantIdAsync(int productVariantId, CancellationToken ct)
     {
         return await _context.inventories
-            .AsNoTracking()
             .FirstOrDefaultAsync(i => i.product_variant_id == productVariantId, ct);
+    }
+
+    public async Task<IEnumerable<Inventory>> GetAllWithProductAsync(CancellationToken ct)
+    {
+        return await _context.inventories
+            .AsNoTracking()
+            .Include(i => i.product_variant)
+                .ThenInclude(v => v.product)
+            .OrderBy(i => i.product_variant.product.name)
+            .ThenBy(i => i.product_variant.sku)
+            .ToListAsync(ct);
     }
 }

@@ -1,4 +1,5 @@
 using System.Text;
+using API.Middlewares;
 using Application.Configuration;
 using Infraestructure.Configuration;
 using Infraestructure.Persistence;
@@ -81,7 +82,7 @@ builder.Services.AddSwaggerGen(options =>
 var app = builder.Build();
 
 /* Implementar Middleware */
-//app.UseMiddleware<>();
+app.UseMiddleware<ErrorHandlingMiddleware>();
 
 
 
