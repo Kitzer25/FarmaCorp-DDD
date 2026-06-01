@@ -28,6 +28,7 @@ public interface IUnitOfWork : IDisposable
 
     public ICustomerRepository CustomerRepo { get; }
     public ICustomerAddressRepository CustomerAddressRepo { get; }
+    public ICartItemRepository CartItemRepo { get; }
 
     public IPromotionRepository PromotionRepo { get; }
     public IPromotionCodeRepository PromotionCodeRepo { get; }

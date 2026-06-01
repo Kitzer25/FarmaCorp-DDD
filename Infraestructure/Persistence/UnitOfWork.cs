@@ -31,6 +31,7 @@ public class UnitOfWork : IUnitOfWork
         PaymentMethodRepo = new PaymentMethodRepository(_context);
         CustomerRepo = new CustomerRepository(_context);
         CustomerAddressRepo = new CustomerAddressRepository(_context);
+        CartItemRepo = new CartItemRepository(_context);
         PromotionRepo = new PromotionRepository(_context);
         PromotionCodeRepo = new PromotionCodeRepository(_context);
     }
@@ -49,6 +50,7 @@ public class UnitOfWork : IUnitOfWork
     public IPaymentMethodRepository PaymentMethodRepo { get; }
     public ICustomerRepository CustomerRepo { get; }
     public ICustomerAddressRepository CustomerAddressRepo { get; }
+    public ICartItemRepository CartItemRepo { get; }
     public IPromotionRepository PromotionRepo { get; }
     public IPromotionCodeRepository PromotionCodeRepo { get; }
 
