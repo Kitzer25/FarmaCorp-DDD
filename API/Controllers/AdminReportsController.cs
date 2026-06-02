@@ -1,11 +1,12 @@
 using Application.Reports.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Core.Constants;
 
 namespace API.Controllers;
 
 [ApiController]
-[Authorize(Policy = "TotalAccess")]
+[Authorize(Policy = PolicyNames.ManagerAccess)]
 [Route("api/v1/admin/reports")]
 public class AdminReportsController : ControllerBase
 {

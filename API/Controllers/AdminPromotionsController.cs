@@ -2,11 +2,12 @@ using Application.Promotions.Dtos;
 using Application.Promotions.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Core.Constants;
 
 namespace API.Controllers;
 
 [ApiController]
-[Authorize(Policy = "TotalAccess")]
+[Authorize(Policy = PolicyNames.ManagerAccess)]
 [Route("api/v1/admin/promotions")]
 public class AdminPromotionsController : ControllerBase
 {

@@ -1,11 +1,12 @@
 using Application.Notifications.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Core.Constants;
 
 namespace API.Controllers;
 
 [ApiController]
-[Authorize(Policy = "TotalAccess")]
+[Authorize(Policy = PolicyNames.AdminOnly)]
 [Route("api/v1/admin/notifications")]
 public class AdminNotificationsController : ControllerBase
 {

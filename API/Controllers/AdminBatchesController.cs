@@ -2,11 +2,12 @@ using Application.Batches.Dtos;
 using Application.Batches.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Core.Constants;
 
 namespace API.Controllers;
 
 [ApiController]
-[Authorize(Policy = "TotalAccess")]
+[Authorize(Policy = PolicyNames.SalesAccess)]
 [Route("api/v1/admin/batches")]
 public class AdminBatchesController : ControllerBase
 {
