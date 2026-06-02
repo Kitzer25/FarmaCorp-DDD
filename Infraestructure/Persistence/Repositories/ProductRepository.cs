@@ -21,7 +21,12 @@ public class ProductRepository :
     {
         return await _context.products
             .AsNoTracking()
-            .Where(p => p.deleted_at == null)
+            .Where(p => p.deleted_at == null && p.is_active)
+            .Include(p => p.category)
+            .Include(p => p.laboratory)
+            .Include(p => p.product_images)
+            .Include(p => p.product_variants)
+            .ThenInclude(v => v.inventory)
             .OrderBy(p => p.name)
             .ToListAsync(ct);
     }
