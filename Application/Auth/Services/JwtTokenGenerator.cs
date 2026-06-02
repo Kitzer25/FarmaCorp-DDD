@@ -4,6 +4,7 @@ using System.Text;
 using Core.Entities;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Core.Constants;
 
 namespace Application.Auth.Services;
 
@@ -35,13 +36,14 @@ public class JwtTokenGenerator
         {
             new Claim(ClaimTypes.NameIdentifier, user.user_id.ToString()),
             new Claim(ClaimTypes.Email, user.email),
-            new Claim(ClaimTypes.Name, $"{user.first_name} {user.last_name}")
+            new Claim(ClaimTypes.Name, $"{user.first_name} {user.last_name}"),
+            new Claim(ClaimTypes.Role,           Roles.Client)
         };
 
-        foreach (var userRole in user.user_roleusers)
-        {
-            claims.Add(new Claim(ClaimTypes.Role, userRole.role.name));
-        }
+        // foreach (var userRole in user.user_roleusers)
+        // {
+        //     claims.Add(new Claim(ClaimTypes.Role, userRole.role.name));
+        // }
 
         return GenerateToken(claims);
     }
@@ -71,4 +73,6 @@ public class JwtTokenGenerator
 
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
+    
+    
 }

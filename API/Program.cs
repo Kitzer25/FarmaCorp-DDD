@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
+using Core.Constants;
 
 DotNetEnv.Env.Load("../.env");
 
@@ -33,6 +34,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuer = true,
             ValidateAudience = true,
             ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
             ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
             ValidAudience = builder.Configuration["JwtSettings:Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(
@@ -43,13 +45,41 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 /*
  * JWT Policies
+
+
+ * Políticas de autorización
+ *
+ * AdminOnly        → solo Admin
+ * PharmacistAccess → Admin + Pharmacist   (recetas, inventario)
+ * SalesAccess      → Admin + SalesRep + Manager (productos, pedidos, lotes)
+ * ManagerAccess    → Admin + Manager      (reportes, clientes, promociones)
+ * InternalAccess   → cualquier empleado interno
+ * ClientAccess     → compradores del eCommerce
+ * TotalAccess      → alias de AdminOnly (retrocompatibilidad)
  */
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("TotalAccess", policy => 
-        policy.RequireRole("Admin"));
-    options.AddPolicy("ClientAccess", policy =>
-        policy.RequireRole("Client"));
+    options.AddPolicy(PolicyNames.AdminOnly,
+        p => p.RequireRole(Roles.Admin));
+
+    options.AddPolicy(PolicyNames.PharmacistAccess,
+        p => p.RequireRole(Roles.Admin, Roles.Pharmacist));
+
+    options.AddPolicy(PolicyNames.SalesAccess,
+        p => p.RequireRole(Roles.Admin, Roles.SalesRep, Roles.Manager));
+
+    options.AddPolicy(PolicyNames.ManagerAccess,
+        p => p.RequireRole(Roles.Admin, Roles.Manager));
+
+    options.AddPolicy(PolicyNames.InternalAccess,
+        p => p.RequireRole(Roles.Admin, Roles.Pharmacist, Roles.SalesRep, Roles.Manager));
+
+    options.AddPolicy(PolicyNames.ClientAccess,
+        p => p.RequireRole(Roles.Client));
+
+    // Alias de retrocompatibilidad
+    options.AddPolicy(PolicyNames.TotalAccess,
+        p => p.RequireRole(Roles.Admin));
 });
 
 
@@ -99,6 +129,7 @@ app.UseHttpsRedirection();
 /* JWT Inicialización */
 app.UseAuthentication();
 app.UseAuthorization();
+
 app.MapControllers(); //Swagger
 
 app.Run();

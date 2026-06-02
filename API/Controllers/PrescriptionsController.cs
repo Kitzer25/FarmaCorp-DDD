@@ -3,11 +3,12 @@ using Application.Prescriptions.Dtos;
 using Application.Prescriptions.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Core.Constants;
 
 namespace API.Controllers;
 
 [ApiController]
-[Authorize(Policy = "ClientAccess")]
+[Authorize(Policy = PolicyNames.ClientAccess)]
 [Route("api/v1/prescriptions")]
 public class PrescriptionsController : ControllerBase
 {

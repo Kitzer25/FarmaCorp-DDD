@@ -3,11 +3,12 @@ using Application.Orders.Dtos;
 using Application.Orders.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Core.Constants;
 
 namespace API.Controllers;
 
 [ApiController]
-[Authorize(Policy = "ClientAccess")]
+[Authorize(Policy = PolicyNames.ClientAccess)]
 [Route("api/v1/orders")]
 public class OrdersController : ControllerBase
 {

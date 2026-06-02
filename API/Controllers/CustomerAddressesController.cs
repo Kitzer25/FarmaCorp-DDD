@@ -6,11 +6,12 @@ using Core.Ports;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Core.Constants;
 
 namespace API.Controllers;
 
 [ApiController]
-[Authorize(Policy = "ClientAccess")]
+[Authorize(Policy = PolicyNames.ClientAccess)]
 [Route("api/v1/customer/addresses")]
 public class CustomerAddressesController : ControllerBase
 {

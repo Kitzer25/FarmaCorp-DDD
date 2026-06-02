@@ -3,11 +3,12 @@ using Application.Inventory.Dtos;
 using Application.Inventory.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Core.Constants;
 
 namespace API.Controllers;
 
 [ApiController]
-[Authorize(Policy = "TotalAccess")]
+[Authorize(Policy = PolicyNames.PharmacistAccess)]
 [Route("api/v1/admin/inventory")]
 public class AdminInventoryController : ControllerBase
 {

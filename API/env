@@ -1,0 +1,10 @@
+# Credenciales base de datos Superbase
+
+ConnectionStrings__Supabase=Host=db.jtsjxjatuypafugnbule.supabase.co;Port=5432;Database=postgres;Username=postgres;Password=GdtYxxRtSSngwX38;
+
+JwtSettings__SecretKey=3x9$KfL!Ñ2pQ8wZrT6vY1aB9@ñLmN5#XcñD
+JwtSettings__Issuer=http://localhost:*
+JwtSettings__Audience=swagger
+JwtSettings__ExpirationMinutes=60
+
+# Otras credendiales jwt, etc

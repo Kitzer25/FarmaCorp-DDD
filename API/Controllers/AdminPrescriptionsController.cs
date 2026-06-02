@@ -3,12 +3,13 @@ using Application.Prescriptions.Dtos;
 using Application.Prescriptions.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Core.Constants;
 
 namespace API.Controllers;
 
 [ApiController]
 [Authorize(Policy = "TotalAccess")]
-[Route("api/v1/admin/prescriptions")]
+[Route(PolicyNames.PharmacistAccess)]
 public class AdminPrescriptionsController : ControllerBase
 {
     private readonly IPrescriptionService _prescriptionService;

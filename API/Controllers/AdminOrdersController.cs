@@ -2,11 +2,12 @@ using System.Security.Claims;
 using Application.Orders.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Core.Constants;
 
 namespace API.Controllers;
 
 [ApiController]
-[Authorize(Policy = "TotalAccess")]
+[Authorize(Policy = PolicyNames.SalesAccess)]
 [Route("api/v1/admin/orders")]
 public class AdminOrdersController : ControllerBase
 {
