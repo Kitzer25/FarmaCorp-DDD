@@ -87,4 +87,62 @@ public class ProductService : IProductService
 
         return result;
     }
+    public async Task<ProductDetailDto> GetProductDetailAsync(string slug, CancellationToken ct)
+    {
+        var product = await _unitOfWork.ProductRepo.GetBySlugAsync(slug, ct);
+
+        if (product == null || product.deleted_at != null || !product.is_active)
+            throw new KeyNotFoundException($"Producto '{slug}' no encontrado.");
+
+        var variants = product.product_variants
+            .Where(v => v.is_active && v.deleted_at == null)
+            .OrderBy(v => v.sort_order)
+            .Select(v => new VariantDto
+            {
+                ProductVariantId  = v.product_variant_id,
+                Sku               = v.sku,
+                Barcode           = v.barcode,
+                Price             = v.price,
+                CompareAtPrice    = v.compare_at_price,
+                PackageSize       = v.package_size,
+                PackageDescription = v.package_description,
+                Concentration     = v.concentration,
+                DrugFormName      = v.drug_form.name,
+                UnitName          = v.unit?.name,
+                Stock             = v.inventory != null
+                                        ? v.inventory.quantity_on_hand - v.inventory.reserved_quantity
+                                        : 0,
+                SortOrder         = v.sort_order
+            }).ToList();
+
+        var images = product.product_images
+            .OrderByDescending(i => i.is_main)
+            .ThenBy(i => i.sort_order)
+            .Select(i => new ImageDto
+            {
+                ProductImageId   = i.product_image_id,
+                ImageUrl         = i.image_url,
+                AltText          = i.alt_text,
+                IsMain           = i.is_main,
+                SortOrder        = i.sort_order,
+                ProductVariantId = i.product_variant_id
+            }).ToList();
+
+        return new ProductDetailDto
+        {
+            ProductId            = product.product_id,
+            Name                 = product.name,
+            Slug                 = product.slug,
+            GenericName          = product.generic_name,
+            Description          = product.description,
+            ShortDescription     = product.short_description,
+            ActiveIngredient     = product.active_ingredient,
+            RequiresPrescription = product.requires_prescription,
+            IsControlled         = product.is_controlled,
+            CategoryName         = product.category.name,
+            LaboratoryName       = product.laboratory.name,
+            Variants             = variants,
+            Images               = images
+        };
+    }    
 }

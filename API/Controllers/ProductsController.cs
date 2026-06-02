@@ -48,4 +48,17 @@ public class ProductsController : ControllerBase
             return BadRequest(new { message = ex.Message });
         }
     }
+    [HttpGet("{slug}")]
+    public async Task<IActionResult> GetProductDetail(string slug, CancellationToken ct)
+    {
+        try
+        {
+            var result = await _mediator.Send(new GetProductDetailCommand { Slug = slug }, ct);
+            return Ok(result);
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
+    }
 }
