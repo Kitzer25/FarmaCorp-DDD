@@ -35,4 +35,6 @@ public interface IUnitOfWork : IDisposable
 
     public IPromotionRepository PromotionRepo { get; }
     public IPromotionCodeRepository PromotionCodeRepo { get; }
+    
+    public ICategoryRepository CategoryRepo { get; }
 }
