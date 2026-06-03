@@ -4,6 +4,7 @@ using Application.Audit.Services;
 using Application.Auth.Services;
 using Application.Batches.Services;
 using Application.Cart.Services;
+using Application.Categories.Services;
 using Application.Inventory.Services;
 using Application.Notifications.Services;
 using Application.Orders.Services;
@@ -35,6 +36,7 @@ public static class DependencyInjection
         services.AddScoped<IEmailService, SimulatedEmailService>();
         services.AddScoped<IAuditService, AuditService>();
         services.AddScoped<IProductService, ProductService>();
+        services.AddScoped<ICategoryService, CategoryService>();
         
         return services;
     }

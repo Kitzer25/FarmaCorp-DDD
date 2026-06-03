@@ -37,6 +37,7 @@ public class UnitOfWork : IUnitOfWork
         PrescriptionUploadRepo = new PrescriptionUploadRepository(_context);
         PromotionRepo = new PromotionRepository(_context);
         PromotionCodeRepo = new PromotionCodeRepository(_context);
+        CategoryRepo = new CategoryRepository(_context);
     }
     //Repositorios Específicos TODO
     public IUserRepository UserRepo { get; }
@@ -59,6 +60,7 @@ public class UnitOfWork : IUnitOfWork
     public IPrescriptionUploadRepository PrescriptionUploadRepo { get; }
     public IPromotionRepository PromotionRepo { get; }
     public IPromotionCodeRepository PromotionCodeRepo { get; }
+    public ICategoryRepository CategoryRepo { get; }
 
     //Funcionalidades
     public IGRepositories<T> Repositories<T>() where T : class
