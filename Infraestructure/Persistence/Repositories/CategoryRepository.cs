@@ -1,12 +1,21 @@
 using Core.Entities;
-using Core.Ports;
 using Core.Ports.Repositories;
-using Infraestructure.Persistence; 
+using Microsoft.EntityFrameworkCore;
+
 namespace Infraestructure.Persistence.Repositories;
-public class CategoryRepository : 
+
+public class CategoryRepository :
     GRepositories<Category>,
     ICategoryRepository
-{ 
-    public CategoryRepository(AppDbContext context) : base(context)
-    { }  
+{
+    public CategoryRepository(AppDbContext context) : base(context) { }
+
+    public async Task<IEnumerable<Category>> GetActiveAsync(CancellationToken ct)
+    {
+        return await _context.categories
+            .AsNoTracking()
+            .Where(c => c.is_active)
+            .OrderBy(c => c.sort_order)
+            .ToListAsync(ct);
+    }
 }

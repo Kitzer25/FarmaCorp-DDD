@@ -4,10 +4,12 @@ using Application.Audit.Services;
 using Application.Auth.Services;
 using Application.Batches.Services;
 using Application.Cart.Services;
+using Application.Categories.Services;
 using Application.Inventory.Services;
 using Application.Notifications.Services;
 using Application.Orders.Services;
 using Application.Prescriptions.Services;
+using Application.Products.Services;
 using Application.Promotions.Services;
 using Application.Reports.Services;
 using Microsoft.Extensions.DependencyInjection;
@@ -33,7 +35,9 @@ public static class DependencyInjection
         services.AddScoped<IReportService, ReportService>();
         services.AddScoped<IEmailService, SimulatedEmailService>();
         services.AddScoped<IAuditService, AuditService>();
-
+        services.AddScoped<IProductService, ProductService>();
+        services.AddScoped<ICategoryService, CategoryService>();
+        
         return services;
     }
 }
