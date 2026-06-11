@@ -1,8 +1,11 @@
 using System.Net.Mime;
 using Core.Ports;
 using Core.Ports.Repositories;
-using Infraestructure.Persistence;
-using Infraestructure.Persistence.Repositories;
+using Core.Ports.Repositories.ERepository;
+using Core.Ports.Services.AuthService;
+using Infraestructure.Adapters.Repositories;
+using Infraestructure.Adapters.Repositories.ERepository;
+using Infraestructure.Adapters.Services.AuthService;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Infraestructure.Configuration;
@@ -38,6 +41,10 @@ public static class DependencyInjection
         services.AddScoped<IPrescriptionUploadRepository, PrescriptionUploadRepository>();
         services.AddScoped<IPromotionRepository, PromotionRepository>();
         services.AddScoped<IPromotionCodeRepository, PromotionCodeRepository>();
+        
+        //Security
+        services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
+        services.AddScoped<IHashPassword, HashPassword>();
         
         return services;
     }

@@ -1,17 +1,7 @@
 using System.Reflection;
-using Application.AdminProducts.Services;
-using Application.Audit.Services;
-using Application.Auth.Services;
-using Application.Batches.Services;
-using Application.Cart.Services;
-using Application.Categories.Services;
-using Application.Inventory.Services;
-using Application.Notifications.Services;
-using Application.Orders.Services;
-using Application.Prescriptions.Services;
-using Application.Products.Services;
-using Application.Promotions.Services;
-using Application.Reports.Services;
+using Core.Ports.Services;
+using Infraestructure.Adapters.Services;
+using Infraestructure.Adapters.Services.AuthService;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Application.Configuration;
