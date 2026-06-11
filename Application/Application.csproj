@@ -7,17 +7,81 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="UserCase\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\Infraestructure\Infraestructure.csproj" />
-      <ProjectReference Include="..\Core\Core.csproj" />
+      <ProjectReference Include="..\Domain\Domain.csproj" />
     </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="BCrypt.Net-Next" Version="4.2.0" />
       <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.18.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="UseCases\AuditLog\Commands\" />
+      <Folder Include="UseCases\AuditLog\Querys\" />
+      <Folder Include="UseCases\Auth\" />
+      <Folder Include="UseCases\CartItem\Commands\" />
+      <Folder Include="UseCases\CartItem\Querys\" />
+      <Folder Include="UseCases\Category\Commands\" />
+      <Folder Include="UseCases\Category\Querys\" />
+      <Folder Include="UseCases\CustomerAddress\Querys\" />
+      <Folder Include="UseCases\CustomerWishlist\Commands\" />
+      <Folder Include="UseCases\CustomerWishlist\Querys\" />
+      <Folder Include="UseCases\Customer\Commands\" />
+      <Folder Include="UseCases\Customer\Querys\" />
+      <Folder Include="UseCases\DiscountType\Commands\" />
+      <Folder Include="UseCases\DiscountType\Querys\" />
+      <Folder Include="UseCases\DrugForm\Commands\" />
+      <Folder Include="UseCases\DrugForm\Querys\" />
+      <Folder Include="UseCases\InventoryMovementType\Commands\" />
+      <Folder Include="UseCases\InventoryMovementType\Querys\" />
+      <Folder Include="UseCases\InventoryMovement\Commands\" />
+      <Folder Include="UseCases\InventoryMovement\Querys\" />
+      <Folder Include="UseCases\Inventory\Commands\" />
+      <Folder Include="UseCases\Inventory\Querys\" />
+      <Folder Include="UseCases\Laboratory\Commands\" />
+      <Folder Include="UseCases\Laboratory\Querys\" />
+      <Folder Include="UseCases\MeasurementUnit\Commands\" />
+      <Folder Include="UseCases\MeasurementUnit\Querys\" />
+      <Folder Include="UseCases\OrderItem\Commands\" />
+      <Folder Include="UseCases\OrderItem\Querys\" />
+      <Folder Include="UseCases\OrderPayment\Commands\" />
+      <Folder Include="UseCases\OrderPayment\Querys\" />
+      <Folder Include="UseCases\OrderStatusHistory\Commands\" />
+      <Folder Include="UseCases\OrderStatusHistory\Querys\" />
+      <Folder Include="UseCases\OrderStatus\Commands\" />
+      <Folder Include="UseCases\OrderStatus\Querys\" />
+      <Folder Include="UseCases\Order\Commands\" />
+      <Folder Include="UseCases\Order\Querys\" />
+      <Folder Include="UseCases\PaymentMethod\Commands\" />
+      <Folder Include="UseCases\PaymentMethod\Querys\" />
+      <Folder Include="UseCases\PrescriptionUpload\Commands\" />
+      <Folder Include="UseCases\PrescriptionUpload\Querys\" />
+      <Folder Include="UseCases\ProductBatch\Commands\" />
+      <Folder Include="UseCases\ProductBatch\Querys\" />
+      <Folder Include="UseCases\ProductCategory\Commands\" />
+      <Folder Include="UseCases\ProductCategory\Querys\" />
+      <Folder Include="UseCases\ProductImage\Commands\" />
+      <Folder Include="UseCases\ProductImage\Querys\" />
+      <Folder Include="UseCases\ProductVariant\Commands\" />
+      <Folder Include="UseCases\ProductVariant\Querys\" />
+      <Folder Include="UseCases\Product\Commands\" />
+      <Folder Include="UseCases\PromotionCode\Commands\" />
+      <Folder Include="UseCases\PromotionCode\Querys\" />
+      <Folder Include="UseCases\Promotion\Commands\" />
+      <Folder Include="UseCases\Promotion\Querys\" />
+      <Folder Include="UseCases\Role\Commands\" />
+      <Folder Include="UseCases\Role\Querys\" />
+      <Folder Include="UseCases\UserRole\Commands\" />
+      <Folder Include="UseCases\UserRole\Querys\" />
+      <Folder Include="UseCases\User\Commands\" />
+      <Folder Include="UseCases\User\Querys\" />
+      <Folder Include="UseCases\VAvailableStock\Commands\" />
+      <Folder Include="UseCases\VAvailableStock\Querys\" />
+      <Folder Include="UseCases\VCustomerOrderSummary\Commands\" />
+      <Folder Include="UseCases\VCustomerOrderSummary\Querys\" />
+      <Folder Include="UseCases\VExpiringBatch\Commands\" />
+      <Folder Include="UseCases\VExpiringBatch\Querys\" />
     </ItemGroup>
 
 </Project>
