@@ -1,8 +1,9 @@
-using Application.AdminProducts.Dtos;
-using Application.AdminProducts.Services;
+using Core.Commons;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Core.Constants;
+using Core.DTO_s.AdminProducts;
+using Core.Ports.Services;
+using Core.Ports.Services.EServices;
 
 namespace API.Controllers;
 

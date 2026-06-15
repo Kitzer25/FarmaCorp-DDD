@@ -1,4 +1,5 @@
-using Application.Promotions.Services;
+using Core.Ports.Services;
+using Core.Ports.Services.EServices;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;

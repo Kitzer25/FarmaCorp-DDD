@@ -1,5 +1,5 @@
-using Application.Products.Commands;
-using Application.Products.Dtos;
+using Application.UseCases.Product.Querys;
+using Core.DTO_s.Products;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
