@@ -1,9 +1,10 @@
 using System.Security.Claims;
-using Application.Prescriptions.Dtos;
-using Application.Prescriptions.Services;
+using Core.Commons;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Core.Constants;
+using Core.DTO_s.Prescriptions;
+using Core.Ports.Services;
+using Core.Ports.Services.EServices;
 
 namespace API.Controllers;
 

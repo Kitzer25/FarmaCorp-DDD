@@ -1,8 +1,9 @@
-using Application.Promotions.Dtos;
-using Application.Promotions.Services;
+using Core.Commons;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Core.Constants;
+using Core.DTO_s.Promotions;
+using Core.Ports.Services;
+using Core.Ports.Services.EServices;
 
 namespace API.Controllers;
 

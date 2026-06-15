@@ -1,5 +1,5 @@
 using API.Contracts.Auth;
-using Application.Auth.Commands;
+using Application.UseCases.Auth.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

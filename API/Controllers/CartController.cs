@@ -1,10 +1,11 @@
 using System.Security.Claims;
 using API.Contracts.Cart;
-using Application.Cart.Commands;
+using Application.UseCases.Cart.Commands;
+using Application.UseCases.Cart.Querys;
+using Core.Commons;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Core.Constants;
 
 namespace API.Controllers;
 

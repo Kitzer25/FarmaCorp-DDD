@@ -1,15 +1,16 @@
 using System.Text;
 using API.Middlewares;
 using Application.Configuration;
+using Core.Commons;
 using Infraestructure.Configuration;
-using Infraestructure.Persistence;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
-using Core.Constants;
+using DotNetEnv;
+using Infraestructure.Context;
 
-DotNetEnv.Env.Load("../.env");
+Env.Load("../.env");
 
 var builder = WebApplication.CreateBuilder(args);
 

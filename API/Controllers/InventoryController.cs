@@ -1,5 +1,6 @@
-using Application.Inventory.Dtos;
+using Core.DTO_s.Inventory;
 using Core.Ports;
+using Core.Ports.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
