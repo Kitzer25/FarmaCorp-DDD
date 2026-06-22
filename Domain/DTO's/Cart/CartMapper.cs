@@ -1,6 +1,6 @@
 using Core.Entities;
 
-namespace Application.Cart.Dtos;
+namespace Core.DTO_s.Cart;
 
 public static class CartMapper
 {

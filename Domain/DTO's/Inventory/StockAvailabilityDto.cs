@@ -1,4 +1,4 @@
-namespace Application.Inventory.Dtos;
+namespace Core.DTO_s.Inventory;
 
 public class StockAvailabilityDto
 {

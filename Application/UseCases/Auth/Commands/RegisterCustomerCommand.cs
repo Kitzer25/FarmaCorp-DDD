@@ -1,6 +1,7 @@
-using Application.Auth.Dtos;
+using Core.DTO_s.Auth;
 using Core.Entities;
 using Core.Ports;
+using Core.Ports.Repositories;
 using Infraestructure.Adapters.Services.AuthService;
 using MediatR;
 

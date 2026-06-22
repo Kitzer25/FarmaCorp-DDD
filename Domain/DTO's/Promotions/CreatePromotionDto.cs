@@ -1,4 +1,4 @@
-namespace Application.Promotions.Dtos;
+namespace Core.DTO_s.Promotions;
 
 public class CreatePromotionDto
 {

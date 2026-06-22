@@ -1,7 +1,8 @@
 using Core.Ports.Services;
+using Core.Ports.Services.EServices;
 using Microsoft.Extensions.Logging;
 
-namespace Infraestructure.Adapters.Services;
+namespace Infraestructure.Adapters.Services.EServices;
 
 public class SimulatedEmailService : IEmailService
 {

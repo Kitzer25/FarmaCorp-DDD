@@ -1,4 +1,5 @@
 using Core.Ports;
+using Core.Ports.Repositories;
 using Infraestructure.Context;
 using Microsoft.EntityFrameworkCore;
 

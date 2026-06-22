@@ -1,5 +1,6 @@
-using Application.CustomerAddresses.Dtos;
+using Core.DTO_s.CustomerAddresses;
 using Core.Ports;
+using Core.Ports.Repositories;
 using MediatR;
 
 namespace Application.UseCases.CustomerAddress.Commands;

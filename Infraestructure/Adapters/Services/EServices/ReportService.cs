@@ -1,8 +1,10 @@
-using Application.Reports.Dtos;
+using Core.DTO_s.Reports;
 using Core.Ports;
+using Core.Ports.Repositories;
 using Core.Ports.Services;
+using Core.Ports.Services.EServices;
 
-namespace Infraestructure.Adapters.Services;
+namespace Infraestructure.Adapters.Services.EServices;
 
 public class ReportService : IReportService
 {

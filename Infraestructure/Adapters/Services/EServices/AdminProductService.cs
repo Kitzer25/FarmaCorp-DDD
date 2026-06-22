@@ -1,10 +1,12 @@
 using System.Text;
-using Application.AdminProducts.Dtos;
+using Core.DTO_s.AdminProducts;
 using Core.Entities;
 using Core.Ports;
+using Core.Ports.Repositories;
 using Core.Ports.Services;
+using Core.Ports.Services.EServices;
 
-namespace Infraestructure.Adapters.Services;
+namespace Infraestructure.Adapters.Services.EServices;
 
 public class AdminProductService : IAdminProductService
 {

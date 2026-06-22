@@ -1,6 +1,6 @@
-using Application.Cart.Dtos;
+using Core.DTO_s.Cart;
 
-namespace Core.Ports.Services;
+namespace Core.Ports.Services.EServices;
 
 public interface ICartService
 {

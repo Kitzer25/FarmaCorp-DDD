@@ -1,4 +1,4 @@
-namespace Core.Ports.Services;
+namespace Core.Ports.Services.EServices;
 
 public interface IAuditService
 {

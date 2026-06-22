@@ -1,6 +1,6 @@
 using Core.Entities;
 
-namespace Application.CustomerAddresses.Dtos;
+namespace Core.DTO_s.CustomerAddresses;
 
 public static class CustomerAddressMapper
 {

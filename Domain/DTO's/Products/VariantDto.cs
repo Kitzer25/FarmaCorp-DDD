@@ -1,4 +1,4 @@
-namespace Application.Products.Dtos;
+namespace Core.DTO_s.Products;
 
 public class VariantDto
 {

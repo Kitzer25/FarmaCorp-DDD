@@ -1,5 +1,6 @@
-using Application.Products.Dtos;
+using Core.DTO_s.Products;
 using Core.Ports.Services;
+using Core.Ports.Services.EServices;
 using MediatR;
 
 namespace Application.UseCases.Product.Querys;

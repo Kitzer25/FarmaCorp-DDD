@@ -1,7 +1,6 @@
-using Core.Ports.Repositories;
 using Core.Ports.Repositories.ERepository;
 
-namespace Core.Ports;
+namespace Core.Ports.Repositories;
 
 public interface IUnitOfWork : IDisposable
 {
