@@ -1,6 +1,6 @@
-using Application.Categories.Dtos;
+using Core.DTO_s.Products;
 
-namespace Core.Ports.Services;
+namespace Core.Ports.Services.EServices;
 
 public interface ICategoryService
 {

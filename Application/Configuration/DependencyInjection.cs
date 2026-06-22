@@ -1,7 +1,9 @@
 using System.Reflection;
 using Core.Ports.Services;
+using Core.Ports.Services.EServices;
 using Infraestructure.Adapters.Services;
 using Infraestructure.Adapters.Services.AuthService;
+using Infraestructure.Adapters.Services.EServices;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Application.Configuration;

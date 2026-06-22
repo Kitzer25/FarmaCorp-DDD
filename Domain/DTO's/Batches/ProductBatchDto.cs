@@ -1,4 +1,4 @@
-namespace Application.Batches.Dtos;
+namespace Core.DTO_s.Batches;
 
 public class ProductBatchDto
 {

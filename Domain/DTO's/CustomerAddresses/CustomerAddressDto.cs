@@ -1,4 +1,4 @@
-namespace Application.CustomerAddresses.Dtos;
+namespace Core.DTO_s.CustomerAddresses;
 
 public class CustomerAddressDto
 {

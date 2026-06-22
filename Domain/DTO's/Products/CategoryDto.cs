@@ -1,4 +1,4 @@
-namespace Application.Categories.Dtos;
+namespace Core.DTO_s.Products;
 
 public class CategoryDto
 {

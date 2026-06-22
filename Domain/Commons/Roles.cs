@@ -1,4 +1,4 @@
-﻿namespace Core.Constants;
+﻿namespace Core.Commons;
 
 /// <summary>
 /// Nombres de roles del sistema.

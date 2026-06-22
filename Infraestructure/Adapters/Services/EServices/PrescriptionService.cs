@@ -1,9 +1,11 @@
-using Application.Prescriptions.Dtos;
+using Core.DTO_s.Prescriptions;
 using Core.Entities;
 using Core.Ports;
+using Core.Ports.Repositories;
 using Core.Ports.Services;
+using Core.Ports.Services.EServices;
 
-namespace Infraestructure.Adapters.Services;
+namespace Infraestructure.Adapters.Services.EServices;
 
 public class PrescriptionService : IPrescriptionService
 {

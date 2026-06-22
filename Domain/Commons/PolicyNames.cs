@@ -1,4 +1,4 @@
-﻿namespace Core.Constants;
+﻿namespace Core.Commons;
 
 /// <summary>
 /// Nombres de las políticas de autorización registradas en Program.cs.

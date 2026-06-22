@@ -1,6 +1,6 @@
-using Application.Orders.Dtos;
+using Core.DTO_s.Orders;
 
-namespace Core.Ports.Services;
+namespace Core.Ports.Services.EServices;
 
 public interface IOrderService
 {

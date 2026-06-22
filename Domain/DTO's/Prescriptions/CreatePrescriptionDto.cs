@@ -1,4 +1,4 @@
-namespace Application.Prescriptions.Dtos;
+namespace Core.DTO_s.Prescriptions;
 
 public class CreatePrescriptionDto
 {

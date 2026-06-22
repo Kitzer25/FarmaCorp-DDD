@@ -1,6 +1,6 @@
-using Application.AdminProducts.Dtos;
+using Core.DTO_s.AdminProducts;
 
-namespace Core.Ports.Services;
+namespace Core.Ports.Services.EServices;
 
 public interface IAdminProductService
 {

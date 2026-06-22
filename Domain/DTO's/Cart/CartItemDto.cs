@@ -1,4 +1,4 @@
-namespace Application.Cart.Dtos;
+namespace Core.DTO_s.Cart;
 
 public class CartItemDto
 {
