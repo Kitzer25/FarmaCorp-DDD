@@ -7,10 +7,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
-using DotNetEnv;
 using Infraestructure.Context;
-
-Env.Load("../.env");
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,9 +16,15 @@ var builder = WebApplication.CreateBuilder(args);
  */
 builder.Services.AddDbContext<AppDbContext>(o =>
 {
-    var stringcn = builder.Configuration.GetConnectionString("Supabase");
+    var connect = builder.Configuration.GetConnectionString("Supabase");
+    var connectionStrings = connect;
 
-    o.UseNpgsql(stringcn);
+    o.UseNpgsql(
+        connectionStrings,
+        npgsqlOptions => npgsqlOptions.EnableRetryOnFailure(
+            maxRetryCount: 5,
+            maxRetryDelay: TimeSpan.FromMinutes(5),
+            errorCodesToAdd: null));
 });
 
 /*
