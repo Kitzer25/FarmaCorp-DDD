@@ -1,49 +1,38 @@
 using System.Security.Claims;
+using Application.UseCases.Inventory.Commands;
+using Application.UseCases.Inventory.Querys;
 using Core.Commons;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Core.DTO_s.Inventory;
 using Core.Ports.Services;
 using Core.Ports.Services.EServices;
+using MediatR;
 
 namespace API.Controllers;
 
 [ApiController]
-[Authorize(Policy = PolicyNames.PharmacistAccess)]
 [Route("api/v1/admin/inventory")]
-public class AdminInventoryController : ControllerBase
+public sealed class InventoryAdminController : ControllerBase
 {
-    private readonly IInventoryAdminService _inventoryService;
+    private readonly IMediator _mediator;
 
-    public AdminInventoryController(IInventoryAdminService inventoryService)
+    public InventoryAdminController(IMediator mediator)
     {
-        _inventoryService = inventoryService;
+        _mediator = mediator;
     }
 
     [HttpGet]
     public async Task<IActionResult> GetInventory(CancellationToken ct)
     {
-        return Ok(await _inventoryService.GetInventoryAsync(ct));
+        var result = await _mediator.Send(new GetInventoryQuery(), ct);
+        return Ok(result);
     }
 
     [HttpPost("movements")]
-    public async Task<IActionResult> RegisterMovement(CreateInventoryMovementDto request, CancellationToken ct)
+    public async Task<IActionResult> RegisterMovement([FromQuery] int? userId, [FromBody] CreateInventoryMovementDto dto, CancellationToken ct)
     {
-        try
-        {
-            var result = await _inventoryService.RegisterMovementAsync(GetUserId(), request, ct);
-            return Ok(result);
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
-    }
-
-    private int? GetUserId()
-    {
-        var claimValue = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-        return int.TryParse(claimValue, out var userId) ? userId : null;
+        var result = await _mediator.Send(new RegisterInventoryMovementCommand { UserId = userId, Request = dto }, ct);
+        return Ok(result);
     }
 }

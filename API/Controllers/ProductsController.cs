@@ -7,7 +7,7 @@ namespace API.Controllers;
 
 [ApiController]
 [Route("api/v1/products")]
-public class ProductsController : ControllerBase
+public sealed class ProductsController : ControllerBase
 {
     private readonly IMediator _mediator;
 
@@ -17,48 +17,23 @@ public class ProductsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetProducts(
-        [FromQuery] string? search,
-        [FromQuery] int? categoryId,
-        [FromQuery] int? laboratoryId,
-        [FromQuery] string? activeIngredient,
-        [FromQuery] decimal? minPrice,
-        [FromQuery] decimal? maxPrice,
-        CancellationToken ct)
+    public async Task<IActionResult> GetProducts([FromQuery] ProductQueryParams queryParams, CancellationToken ct)
     {
-        try
-        {
-            var result = await _mediator.Send(new GetProductsCommand
-            {
-                Params = new ProductQueryParams
-                {
-                    Search          = search,
-                    CategoryId      = categoryId,
-                    LaboratoryId    = laboratoryId,
-                    ActiveIngredient = activeIngredient,
-                    MinPrice        = minPrice,
-                    MaxPrice        = maxPrice
-                }
-            }, ct);
-
-            return Ok(result);
-        }
-        catch (ArgumentException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
+        var result = await _mediator.Send(new GetProductsQuery { Params = queryParams }, ct);
+        return Ok(result);
     }
+
     [HttpGet("{slug}")]
-    public async Task<IActionResult> GetProductDetail(string slug, CancellationToken ct)
+    public async Task<IActionResult> GetDetail(string slug, CancellationToken ct)
     {
-        try
-        {
-            var result = await _mediator.Send(new GetProductDetailCommand { Slug = slug }, ct);
-            return Ok(result);
-        }
-        catch (KeyNotFoundException ex)
-        {
-            return NotFound(new { message = ex.Message });
-        }
+        var result = await _mediator.Send(new GetProductDetailQuery { Slug = slug}, ct);
+        return Ok(result);
+    }
+
+    [HttpGet("categories")]
+    public async Task<IActionResult> GetCategories(CancellationToken ct)
+    {
+        var result = await _mediator.Send(new GetCategoriesQuery(), ct);
+        return Ok(result);
     }
 }
