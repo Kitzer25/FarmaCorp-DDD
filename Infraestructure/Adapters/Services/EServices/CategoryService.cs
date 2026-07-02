@@ -73,6 +73,9 @@ public class CategoryService : ICategoryService
             return false;
         }
 
-        return await _unitOfWork.CategoryRepo.DeleteAsync(category, ct);
+        await _unitOfWork.CategoryRepo.DeleteAsync(category, ct);
+        await _unitOfWork.SaveChangesAsync(ct);
+
+        return true;
     }
 }

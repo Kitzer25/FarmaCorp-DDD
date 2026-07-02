@@ -37,6 +37,7 @@ public sealed class RemoveCartItemCommandHandler : IRequestHandler<RemoveCartIte
         var cartId = cartItem.cart_id;
 
         await _unitOfWork.CartItemRepo.DeleteAsync(cartItem, cancellationToken);
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         var remainingItems = await _unitOfWork.CartItemRepo
             .CountByCartIdAsync(cartId, cancellationToken);

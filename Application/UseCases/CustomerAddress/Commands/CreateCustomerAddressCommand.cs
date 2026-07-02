@@ -53,6 +53,7 @@ public class CreateCustomerAddressCommandHandler : IRequestHandler<CreateCustome
         };
 
         await _unitOfWork.CustomerAddressRepo.AddAsync(address, cancellationToken);
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         return CustomerAddressMapper.ToDto(address);
     }

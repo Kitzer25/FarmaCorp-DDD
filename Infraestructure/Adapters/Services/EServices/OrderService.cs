@@ -85,6 +85,7 @@ public class OrderService : IOrderService
         };
 
         await _unitOfWork.OrderRepo.AddAsync(order, ct);
+        await _unitOfWork.SaveChangesAsync(ct);
 
         foreach (var cartItem in cart.cart_items)
         {
@@ -126,6 +127,7 @@ public class OrderService : IOrderService
         cart.is_active = false;
         cart.updated_at = DateTime.UtcNow;
         await _unitOfWork.CartRepo.UpdateAsync(cart.cart_id, cart, ct);
+        await _unitOfWork.SaveChangesAsync(ct);
 
         var savedOrder = await _unitOfWork.OrderRepo.GetByIdWithDetailsAsync(order.order_id, ct)
             ?? order;

@@ -39,6 +39,7 @@ public class PrescriptionService : IPrescriptionService
         };
 
         await _unitOfWork.PrescriptionUploadRepo.AddAsync(prescription, ct);
+        await _unitOfWork.SaveChangesAsync(ct);
 
         return ToDto(prescription);
     }

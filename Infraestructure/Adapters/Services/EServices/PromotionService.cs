@@ -53,6 +53,7 @@ public class PromotionService : IPromotionService
         };
 
         await _unitOfWork.PromotionRepo.AddAsync(promotion, ct);
+        await _unitOfWork.SaveChangesAsync(ct);
 
         foreach (var code in request.Codes.Select(NormalizeCode).Distinct())
         {
@@ -66,6 +67,8 @@ public class PromotionService : IPromotionService
                 created_at = DateTime.UtcNow
             }, ct);
         }
+
+        await _unitOfWork.SaveChangesAsync(ct);
 
         var saved = await _unitOfWork.PromotionRepo.GetByIdAsync(promotion.promotion_id, ct) ?? promotion;
         return ToDto(saved);
