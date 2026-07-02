@@ -37,6 +37,8 @@ public class ProductImageService : IProductImageService
             await ClearOtherMainImagesAsync(image, ct);
         }
 
+        await _unitOfWork.SaveChangesAsync(ct);
+
         return image.ToDto();
     }
 
@@ -49,6 +51,7 @@ public class ProductImageService : IProductImageService
         await _unitOfWork.ProductImageRepo.UpdateAsync(image.product_image_id, image, ct);
 
         await ClearOtherMainImagesAsync(image, ct);
+        await _unitOfWork.SaveChangesAsync(ct);
 
         return image.ToDto();
     }
@@ -62,7 +65,10 @@ public class ProductImageService : IProductImageService
             return false;
         }
 
-        return await _unitOfWork.ProductImageRepo.DeleteAsync(image, ct);
+        await _unitOfWork.ProductImageRepo.DeleteAsync(image, ct);
+        await _unitOfWork.SaveChangesAsync(ct);
+
+        return true;
     }
 
     private async Task ClearOtherMainImagesAsync(Domain.Entities.ProductImage mainImage, CancellationToken ct)

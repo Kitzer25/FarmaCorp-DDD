@@ -57,6 +57,7 @@ public class UpdateCustomerAddressCommandHandler : IRequestHandler<UpdateCustome
         address.updated_at = DateTime.UtcNow;
 
         await _unitOfWork.CustomerAddressRepo.UpdateAsync(address.address_id, address, cancellationToken);
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         return CustomerAddressMapper.ToDto(address);
     }

@@ -44,6 +44,8 @@ public class AdminProductService : IAdminProductService
         };
 
         await _unitOfWork.ProductRepo.AddAsync(product, ct);
+        await _unitOfWork.SaveChangesAsync(ct);
+
         await _auditService.RegisterAsync("products", product.product_id.ToString(), "CREATE", null, ToDto(product), null, null, ct);
 
         return ToDto(product);

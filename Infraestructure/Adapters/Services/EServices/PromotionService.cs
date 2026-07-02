@@ -52,23 +52,39 @@ public class PromotionService : IPromotionService
             created_at = DateTime.UtcNow
         };
 
-        await _unitOfWork.PromotionRepo.AddAsync(promotion, ct);
+        await _unitOfWork.BeginTransactionAsync(ct);
 
-        foreach (var code in request.Codes.Select(NormalizeCode).Distinct())
+        try
         {
-            await _unitOfWork.PromotionCodeRepo.AddAsync(new PromotionCode
-            {
-                promotion_id = promotion.promotion_id,
-                code = code,
-                max_uses = request.MaxUses,
-                current_uses = 0,
-                is_active = true,
-                created_at = DateTime.UtcNow
-            }, ct);
-        }
+            await _unitOfWork.PromotionRepo.AddAsync(promotion, ct);
+            await _unitOfWork.SaveChangesAsync(ct);
 
-        var saved = await _unitOfWork.PromotionRepo.GetByIdAsync(promotion.promotion_id, ct) ?? promotion;
-        return ToDto(saved);
+            foreach (var code in request.Codes.Select(NormalizeCode).Distinct())
+            {
+                await _unitOfWork.PromotionCodeRepo.AddAsync(new PromotionCode
+                {
+                    promotion_id = promotion.promotion_id,
+                    code = code,
+                    max_uses = request.MaxUses,
+                    current_uses = 0,
+                    is_active = true,
+                    created_at = DateTime.UtcNow
+                }, ct);
+            }
+
+            await _unitOfWork.SaveChangesAsync(ct);
+
+            var saved = await _unitOfWork.PromotionRepo.GetByIdAsync(promotion.promotion_id, ct) ?? promotion;
+
+            await _unitOfWork.CommitTransactionAsync(ct);
+
+            return ToDto(saved);
+        }
+        catch
+        {
+            await _unitOfWork.RollbackTransactionAsync(ct);
+            throw;
+        }
     }
 
     public async Task<CouponValidationDto> ValidateCouponAsync(string code, decimal orderSubtotal, CancellationToken ct)

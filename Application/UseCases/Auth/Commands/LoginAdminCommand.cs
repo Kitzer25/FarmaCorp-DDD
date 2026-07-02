@@ -57,6 +57,7 @@ public sealed class LoginAdminCommandHandler : IRequestHandler<LoginAdminCommand
         user.last_login_at = DateTime.UtcNow;
 
         await _unitOfWork.UserRepo.UpdateAsync(user.user_id, user, cancellationToken);
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         var token = _jwtTokenGenerator.GenerateAdminToken(user);
 
