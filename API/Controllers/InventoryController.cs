@@ -1,6 +1,6 @@
-using Domain.DTO_s.Inventory;
-using Domain.Ports.Repositories;
+using Application.UseCases.Inventory.Querys;
 using Microsoft.AspNetCore.Mvc;
+using MediatR;
 
 namespace API.Controllers;
 
@@ -8,33 +8,24 @@ namespace API.Controllers;
 [Route("api/v1/inventory")]
 public class InventoryController : ControllerBase
 {
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IMediator _mediator;
 
-    public InventoryController(IUnitOfWork unitOfWork)
+    public InventoryController(IMediator mediator)
     {
-        _unitOfWork = unitOfWork;
+        _mediator = mediator;
     }
 
     [HttpGet("variants/{productVariantId:int}/stock")]
     public async Task<IActionResult> GetAvailableStock(int productVariantId, CancellationToken ct)
     {
-        var inventory = await _unitOfWork.InventoryRepo.GetByProductVariantIdAsync(productVariantId, ct);
-
-        if (inventory == null)
+        try
         {
-            return NotFound(new { message = "No existe stock registrado para la variante indicada." });
+            var result = await _mediator.Send(new GetAvailableStockQuery { ProductVariantId = productVariantId }, ct);
+            return Ok(result);
         }
-
-        var availableQuantity = Math.Max(0, inventory.quantity_on_hand - inventory.reserved_quantity);
-
-        return Ok(new StockAvailabilityDto
+        catch (KeyNotFoundException ex)
         {
-            ProductVariantId = inventory.product_variant_id,
-            QuantityOnHand = inventory.quantity_on_hand,
-            ReservedQuantity = inventory.reserved_quantity,
-            AvailableQuantity = availableQuantity,
-            MinStockLevel = inventory.min_stock_level,
-            IsLowStock = availableQuantity <= inventory.min_stock_level
-        });
+            return NotFound(new { message = ex.Message });
+        }
     }
 }
