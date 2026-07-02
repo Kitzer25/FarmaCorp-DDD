@@ -63,10 +63,6 @@ public class CustomerWishlistService : ICustomerWishlistService
     {
         var results = await _unitOfWork.CustomerWishlistRepo.GetMostWishlistedAsync(top, ct);
 
-        return results.Select(r => new MostWishlistedVariantDto
-        {
-            ProductVariantId = r.ProductVariantId,
-            TimesWishlisted = r.Total
-        });
+        return results.Select(r => r.ToDto());
     }
 }

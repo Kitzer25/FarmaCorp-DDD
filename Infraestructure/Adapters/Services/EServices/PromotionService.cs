@@ -1,6 +1,7 @@
 using Domain.Ports;
 using Domain.Ports.Services;
 using Domain.DTO_s.Promotions;
+using Domain.DTO_s.Promotions.Mappers;
 using Domain.Entities;
 using Domain.Ports.Repositories;
 using Domain.Ports.Services.EServices;
@@ -20,7 +21,7 @@ public class PromotionService : IPromotionService
     {
         var promotions = await _unitOfWork.PromotionRepo.GetActiveAsync(ct);
 
-        return promotions.Select(ToDto);
+        return promotions.Select(p => p.ToDto());
     }
 
     public async Task<PromotionDto> CreateAsync(CreatePromotionDto request, CancellationToken ct)
@@ -78,7 +79,7 @@ public class PromotionService : IPromotionService
 
             await _unitOfWork.CommitTransactionAsync(ct);
 
-            return ToDto(saved);
+            return saved.ToDto();
         }
         catch
         {
@@ -167,26 +168,6 @@ public class PromotionService : IPromotionService
         }
 
         return decimal.Round(Math.Min(discount, subtotal), 2);
-    }
-
-    private static PromotionDto ToDto(Promotion promotion)
-    {
-        return new PromotionDto
-        {
-            PromotionId = promotion.promotion_id,
-            Name = promotion.name,
-            Description = promotion.description,
-            DiscountTypeId = promotion.discount_type_id,
-            DiscountValue = promotion.discount_value,
-            MinOrderAmount = promotion.min_order_amount,
-            MaxDiscountAmount = promotion.max_discount_amount,
-            MaxUses = promotion.max_uses,
-            CurrentUses = promotion.current_uses,
-            StartDate = promotion.start_date,
-            EndDate = promotion.end_date,
-            IsActive = promotion.is_active,
-            Codes = promotion.promotion_codes.Select(c => c.code).ToList()
-        };
     }
 
     private static CouponValidationDto Invalid(string message, decimal subtotal, string? code = null)

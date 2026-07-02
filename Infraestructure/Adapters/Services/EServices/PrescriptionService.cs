@@ -1,6 +1,7 @@
 using Domain.Ports;
 using Domain.Ports.Services;
 using Domain.DTO_s.Prescriptions;
+using Domain.DTO_s.Prescriptions.Mappers;
 using Domain.Entities;
 using Domain.Ports.Repositories;
 using Domain.Ports.Services.EServices;
@@ -41,7 +42,7 @@ public class PrescriptionService : IPrescriptionService
         await _unitOfWork.PrescriptionUploadRepo.AddAsync(prescription, ct);
         await _unitOfWork.SaveChangesAsync(ct);
 
-        return ToDto(prescription);
+        return prescription.ToDto();
     }
 
     public async Task<PrescriptionDto> VerifyAsync(int prescriptionId, int userId, VerifyPrescriptionDto request, CancellationToken ct)
@@ -58,7 +59,7 @@ public class PrescriptionService : IPrescriptionService
             throw new InvalidOperationException("La receta no existe.");
         }
 
-        var before = ToDto(prescription);
+        var before = prescription.ToDto();
         prescription.is_verified = request.Approve;
         prescription.verified_by_user_id = userId;
         prescription.verified_at = DateTime.UtcNow;
@@ -72,30 +73,11 @@ public class PrescriptionService : IPrescriptionService
             prescription.prescription_id.ToString(),
             request.Approve ? "APPROVE" : "REJECT",
             before,
-            ToDto(prescription),
+            prescription.ToDto(),
             userId,
             prescription.customer_id,
             ct);
 
-        return ToDto(prescription);
-    }
-
-    private static PrescriptionDto ToDto(PrescriptionUpload prescription)
-    {
-        return new PrescriptionDto
-        {
-            PrescriptionId = prescription.prescription_id,
-            CustomerId = prescription.customer_id,
-            OrderId = prescription.order_id,
-            ImageUrl = prescription.image_url,
-            DoctorName = prescription.doctor_name,
-            DoctorLicense = prescription.doctor_license,
-            IssuedDate = prescription.issued_date,
-            IsVerified = prescription.is_verified,
-            VerifiedByUserId = prescription.verified_by_user_id,
-            VerifiedAt = prescription.verified_at,
-            RejectionReason = prescription.rejection_reason,
-            Notes = prescription.notes
-        };
+        return prescription.ToDto();
     }
 }

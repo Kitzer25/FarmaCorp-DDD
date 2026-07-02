@@ -1,4 +1,3 @@
-using Domain.DTO_s.Categories;
 using Domain.DTO_s.Categories.Mappers;
 using Domain.Entities;
 using Domain.Ports;
@@ -22,60 +21,5 @@ public class CategoryService : ICategoryService
     {
         IEnumerable<Category> categories = await _unitOfWork.CategoryRepo.GetActiveAsync(ct);
         return CategoryMapper.ToDtoTree(categories);
-    }
-
-    public Task<IEnumerable<Category>> GetAllAsync(CancellationToken ct)
-    {
-        throw new NotImplementedException();
-    }
-
-    Task<Category?> IGRepositories<Category>.GetByIdAsync(int id, CancellationToken ct)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task AddAsync(Category entity, CancellationToken ct)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task UpdateAsync(int id, Category entity, CancellationToken ct)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<bool> DeleteAsync(Category entity, CancellationToken ct)
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task<CategoryDto?> GetByIdAsync(int categoryId, CancellationToken ct)
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task<CategoryDto> CreateAsync(CreateCategoryDto dto, CancellationToken ct)
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task<CategoryDto> UpdateAsync(int categoryId, UpdateCategoryDto dto, CancellationToken ct)
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task<bool> DeleteAsync(int categoryId, CancellationToken ct)
-    {
-        var category = await _unitOfWork.CategoryRepo.GetByIdAsync(categoryId, ct);
-
-        if (category == null)
-        {
-            return false;
-        }
-
-        await _unitOfWork.CategoryRepo.DeleteAsync(category, ct);
-        await _unitOfWork.SaveChangesAsync(ct);
-
-        return true;
     }
 }
