@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Domain.Ports.Services;
+using Application.UseCases.Report.Querys;
 using Domain.Commons;
-using Domain.Ports.Services.EServices;
+using MediatR;
 
 namespace API.Controllers;
 
@@ -11,16 +11,16 @@ namespace API.Controllers;
 [Route("api/v1/admin/reports")]
 public class AdminReportsController : ControllerBase
 {
-    private readonly IReportService _reportService;
+    private readonly IMediator _mediator;
 
-    public AdminReportsController(IReportService reportService)
+    public AdminReportsController(IMediator mediator)
     {
-        _reportService = reportService;
+        _mediator = mediator;
     }
 
     [HttpGet("dashboard")]
     public async Task<IActionResult> GetDashboard(CancellationToken ct)
     {
-        return Ok(await _reportService.GetDashboardSummaryAsync(ct));
+        return Ok(await _mediator.Send(new GetDashboardSummaryQuery(), ct));
     }
 }

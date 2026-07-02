@@ -1,6 +1,6 @@
-using Domain.Ports.Services;
-using Domain.Ports.Services.EServices;
+using Application.UseCases.Promotion.Querys;
 using Microsoft.AspNetCore.Mvc;
+using MediatR;
 
 namespace API.Controllers;
 
@@ -8,17 +8,18 @@ namespace API.Controllers;
 [Route("api/v1/coupons")]
 public class CouponsController : ControllerBase
 {
-    private readonly IPromotionService _promotionService;
+    private readonly IMediator _mediator;
 
-    public CouponsController(IPromotionService promotionService)
+    public CouponsController(IMediator mediator)
     {
-        _promotionService = promotionService;
+        _mediator = mediator;
     }
 
     [HttpPost("validate")]
     public async Task<IActionResult> Validate(ValidateCouponRequest request, CancellationToken ct)
     {
-        return Ok(await _promotionService.ValidateCouponAsync(request.Code, request.OrderSubtotal, ct));
+        var result = await _mediator.Send(new ValidateCouponQuery { Code = request.Code, OrderSubtotal = request.OrderSubtotal }, ct);
+        return Ok(result);
     }
 }
 

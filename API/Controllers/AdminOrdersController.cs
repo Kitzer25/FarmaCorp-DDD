@@ -1,9 +1,10 @@
 using System.Security.Claims;
+using Application.UseCases.Order.Commands;
+using Application.UseCases.Order.Querys;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Domain.Ports.Services;
 using Domain.Commons;
-using Domain.Ports.Services.EServices;
+using MediatR;
 
 namespace API.Controllers;
 
@@ -12,17 +13,18 @@ namespace API.Controllers;
 [Route("api/v1/admin/orders")]
 public class AdminOrdersController : ControllerBase
 {
-    private readonly IOrderService _orderService;
+    private readonly IMediator _mediator;
 
-    public AdminOrdersController(IOrderService orderService)
+    public AdminOrdersController(IMediator mediator)
     {
-        _orderService = orderService;
+        _mediator = mediator;
     }
 
     [HttpGet("next-number")]
     public async Task<IActionResult> GetNextOrderNumber(CancellationToken ct)
     {
-        return Ok(new { orderNumber = await _orderService.GenerateOrderNumberAsync(ct) });
+        var orderNumber = await _mediator.Send(new GenerateOrderNumberQuery(), ct);
+        return Ok(new { orderNumber });
     }
 
     [HttpPatch("{orderId:int}/status")]
@@ -35,7 +37,13 @@ public class AdminOrdersController : ControllerBase
 
         try
         {
-            var result = await _orderService.ChangeStatusAsync(orderId, request.StatusId, GetUserId(), request.Notes, ct);
+            var result = await _mediator.Send(new ChangeOrderStatusCommand
+            {
+                OrderId = orderId,
+                StatusId = request.StatusId,
+                ChangedByUserId = GetUserId(),
+                Notes = request.Notes
+            }, ct);
             return Ok(result);
         }
         catch (InvalidOperationException ex)

@@ -1,9 +1,10 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Domain.Ports.Services;
+using Application.UseCases.Batch.Querys;
+using Application.UseCases.Batch.Commands;
 using Domain.Commons;
 using Domain.DTO_s.Batches;
-using Domain.Ports.Services.EServices;
+using MediatR;
 
 namespace API.Controllers;
 
@@ -12,17 +13,17 @@ namespace API.Controllers;
 [Route("api/v1/admin/batches")]
 public class AdminBatchesController : ControllerBase
 {
-    private readonly IBatchService _batchService;
+    private readonly IMediator _mediator;
 
-    public AdminBatchesController(IBatchService batchService)
+    public AdminBatchesController(IMediator mediator)
     {
-        _batchService = batchService;
+        _mediator = mediator;
     }
 
     [HttpGet]
     public async Task<IActionResult> GetBatches(CancellationToken ct)
     {
-        return Ok(await _batchService.GetBatchesAsync(ct));
+        return Ok(await _mediator.Send(new GetBatchesQuery(), ct));
     }
 
     [HttpPost]
@@ -30,7 +31,7 @@ public class AdminBatchesController : ControllerBase
     {
         try
         {
-            var result = await _batchService.CreateAsync(request, ct);
+            var result = await _mediator.Send(new CreateBatchCommand { Request = request }, ct);
             return Ok(result);
         }
         catch (InvalidOperationException ex)
