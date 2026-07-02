@@ -36,6 +36,17 @@ public interface IUnitOfWork : IDisposable
 
     public IPromotionRepository PromotionRepo { get; }
     public IPromotionCodeRepository PromotionCodeRepo { get; }
-    
+
     public ICategoryRepository CategoryRepo { get; }
+
+    public IOrderStatusHistoryRepository OrderStatusHistoryRepo { get; }
+    public IVExpiringBatchRepository VExpiringBatchRepo { get; }
+    public IVAvalibleStockRepository VAvalibleStockRepo { get; }
+    public IVCustomerOrderSumaryRepository VCustomerOrderSumaryRepo { get; }
+    public IProductImageRepository ProductImageRepo { get; }
+    public ICustomerWishlistRepository CustomerWishlistRepo { get; }
+    public ILaboratoryRepository LaboratoryRepo { get; }
+    public IDrugFormRepository DrugFormRepo { get; }
+    public IMeasurementUnitRepository MeasurementUnitRepo { get; }
+    public IDiscountTypeRepository DiscountTypeRepo { get; }
 }

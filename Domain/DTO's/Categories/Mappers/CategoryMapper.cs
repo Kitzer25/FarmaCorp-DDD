@@ -1,4 +1,5 @@
 using Domain.Entities;
+using ProductCategoryDto = Domain.DTO_s.Products.CategoryDto;
 
 namespace Domain.DTO_s.Categories.Mappers;
 
@@ -7,9 +8,9 @@ public static class CategoryMapper
     /// <summary>
     /// Mapeo plano, sin subcategorías.
     /// </summary>
-    public static CategoryDto ToDto(this Category category)
+    public static ProductCategoryDto ToDto(this Category category)
     {
-        return new CategoryDto
+        return new ProductCategoryDto
         {
             CategoryId = category.category_id,
             Name = category.name,
@@ -23,7 +24,7 @@ public static class CategoryMapper
     /// <summary>
     /// Construye el árbol de un nivel (raíz + subcategorías directas) a partir de una lista plana.
     /// </summary>
-    public static List<CategoryDto> ToDtoTree(this IEnumerable<Category> categories)
+    public static List<ProductCategoryDto> ToDtoTree(this IEnumerable<Category> categories)
     {
         var categoryList = categories.ToList();
 
@@ -34,7 +35,7 @@ public static class CategoryMapper
             .ToList();
     }
 
-    private static CategoryDto ToDtoWithChildren(this Category category, IEnumerable<Category> allCategories)
+    private static ProductCategoryDto ToDtoWithChildren(this Category category, IEnumerable<Category> allCategories)
     {
         var dto = category.ToDto();
 
