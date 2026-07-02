@@ -1,4 +1,5 @@
 using Domain.DTO_s.Inventory;
+using Domain.DTO_s.Inventory.Mappers;
 using Domain.Entities;
 using Domain.Ports.Repositories;
 using Domain.Ports.Services.EServices;
@@ -20,7 +21,7 @@ public class InventoryAdminService : IInventoryAdminService
     {
         var inventory = await _unitOfWork.InventoryRepo.GetAllWithProductAsync(ct);
 
-        return inventory.Select(ToDto);
+        return inventory.Select(i => i.ToDto());
     }
 
     public async Task<InventoryItemDto> RegisterMovementAsync(int? userId, CreateInventoryMovementDto request,
@@ -72,24 +73,28 @@ public class InventoryAdminService : IInventoryAdminService
         var updated = await _unitOfWork.InventoryRepo.GetByProductVariantIdAsync(request.ProductVariantId, ct)
                       ?? inventory;
 
-        return ToDto(updated);
+        return updated.ToDto();
     }
 
-    private static InventoryItemDto ToDto(Inventory inventory)
+    public async Task<StockAvailabilityDto> GetAvailableStockAsync(int productVariantId, CancellationToken ct)
     {
-        var available = Math.Max(0, inventory.quantity_on_hand - inventory.reserved_quantity);
+        var inventory = await _unitOfWork.InventoryRepo.GetByProductVariantIdAsync(productVariantId, ct);
 
-        return new InventoryItemDto
+        if (inventory == null)
         {
-            InventoryId = inventory.inventory_id,
+            throw new KeyNotFoundException("No existe stock registrado para la variante indicada.");
+        }
+
+        var availableQuantity = Math.Max(0, inventory.quantity_on_hand - inventory.reserved_quantity);
+
+        return new StockAvailabilityDto
+        {
             ProductVariantId = inventory.product_variant_id,
-            ProductName = inventory.product_variant?.product?.name,
-            Sku = inventory.product_variant?.sku,
             QuantityOnHand = inventory.quantity_on_hand,
             ReservedQuantity = inventory.reserved_quantity,
-            AvailableQuantity = available,
+            AvailableQuantity = availableQuantity,
             MinStockLevel = inventory.min_stock_level,
-            IsLowStock = available <= inventory.min_stock_level
+            IsLowStock = availableQuantity <= inventory.min_stock_level
         };
     }
 }

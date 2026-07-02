@@ -43,6 +43,8 @@ public class CartService : ICartService
             await UpdateExistingItemAsync(existingItem, newQuantity, variant.price, ct);
         }
 
+        await _unitOfWork.SaveChangesAsync(ct);
+
         return await GetActiveCartAsync(customerId, ct);
     }
 
@@ -58,6 +60,7 @@ public class CartService : ICartService
         cartItem.updated_at = DateTime.UtcNow;
 
         await _unitOfWork.CartItemRepo.UpdateAsync(cartItem.cart_item_id, cartItem, ct);
+        await _unitOfWork.SaveChangesAsync(ct);
 
         return await GetActiveCartAsync(customerId, ct);
     }
@@ -67,6 +70,7 @@ public class CartService : ICartService
         var cartItem = await GetOwnedCartItemAsync(customerId, cartItemId, ct);
 
         await _unitOfWork.CartItemRepo.DeleteAsync(cartItem, ct);
+        await _unitOfWork.SaveChangesAsync(ct);
 
         return await GetActiveCartAsync(customerId, ct);
     }
@@ -88,6 +92,7 @@ public class CartService : ICartService
         };
 
         await _unitOfWork.CartRepo.AddAsync(cart, ct);
+        await _unitOfWork.SaveChangesAsync(ct);
 
         return cart;
     }

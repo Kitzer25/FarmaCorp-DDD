@@ -1,8 +1,9 @@
 using System.Security.Claims;
-using Application.UseCases.Order.Commands;
-using Application.UseCases.Order.Querys;
+using Application.UseCases.OrderUseCase.Commands;
+using Application.UseCases.OrderUseCase.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Domain.Commons;
 using Domain.Ports.Services;
 using Domain.DTO_s.Orders;
 using MediatR;
@@ -10,6 +11,7 @@ using MediatR;
 namespace API.Controllers;
 
 [ApiController]
+[Authorize(Policy = PolicyNames.ClientAccess)]
 [Route("api/v1/orders")]
 public sealed class OrdersController : ControllerBase
 {
@@ -21,24 +23,27 @@ public sealed class OrdersController : ControllerBase
     }
 
     [HttpGet("next-number")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetNextOrderNumber(CancellationToken ct)
     {
-        var result = await _mediator.Send(new GenerateOrderNumberQuery(), ct);
+        var result = await _mediator.Send(new GETGenerateOrderNumberQuery(), ct);
         return Ok(new { OrderNumber = result });
     }
 
     [HttpPost("checkout/{customerId:int}")]
+    [ProducesResponseType(typeof(OrderDto), StatusCodes.Status200OK)]
     public async Task<IActionResult> Checkout(int customerId, [FromBody] CheckoutRequestDto dto, CancellationToken ct)
     {
-        var result = await _mediator.Send(new CheckoutCommand { CustomerId = customerId, Request = dto }, ct);
+        var result = await _mediator.Send(new POSTCheckoutCommand { CustomerId = customerId, Request = dto }, ct);
         return Ok(result);
     }
 
     [HttpPut("{orderId:int}/status")]
+    [ProducesResponseType(typeof(OrderDto), StatusCodes.Status200OK)]
     public async Task<IActionResult> ChangeStatus(int orderId, [FromBody] ChangeStatusRequest request, CancellationToken ct)
     {
-        var result = await _mediator.Send(new ChangeOrderStatusCommand 
-        { 
+        var result = await _mediator.Send(new PATCHChangeOrderStatusCommand
+        {
             OrderId = orderId, 
             StatusId = request.StatusId, 
             ChangedByUserId = request.ChangedByUserId, 

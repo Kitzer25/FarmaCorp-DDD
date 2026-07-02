@@ -1,5 +1,6 @@
 using System.Text;
 using API.Middlewares;
+using Application.Configuration;
 using Domain.Commons;
 using Infraestructure.Configuration;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -89,6 +90,7 @@ builder.Services.AddAuthorization(options =>
 /*
  * Inyección de Dependencias
  */
+builder.Services.AddApplication();
 builder.Services.Addinfraestructure();
 
 

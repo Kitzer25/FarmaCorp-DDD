@@ -1,9 +1,10 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Domain.Ports.Services;
+using Application.UseCases.PromotionUseCase.Queries;
+using Application.UseCases.PromotionUseCase.Commands;
 using Domain.Commons;
 using Domain.DTO_s.Promotions;
-using Domain.Ports.Services.EServices;
+using MediatR;
 
 namespace API.Controllers;
 
@@ -12,22 +13,24 @@ namespace API.Controllers;
 [Route("api/v1/admin/promotions")]
 public class AdminPromotionsController : ControllerBase
 {
-    private readonly IPromotionService _promotionService;
+    private readonly IMediator _mediator;
 
-    public AdminPromotionsController(IPromotionService promotionService)
+    public AdminPromotionsController(IMediator mediator)
     {
-        _promotionService = promotionService;
+        _mediator = mediator;
     }
 
     [HttpGet]
+    [ProducesResponseType(typeof(IEnumerable<PromotionDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetActive(CancellationToken ct)
     {
-        return Ok(await _promotionService.GetActiveAsync(ct));
+        return Ok(await _mediator.Send(new GETActivePromotionsQuery(), ct));
     }
 
     [HttpPost]
+    [ProducesResponseType(typeof(PromotionDto), StatusCodes.Status200OK)]
     public async Task<IActionResult> Create(CreatePromotionDto request, CancellationToken ct)
     {
-        return Ok(await _promotionService.CreateAsync(request, ct));
+        return Ok(await _mediator.Send(new POSTCreatePromotionCommand { Request = request }, ct));
     }
 }

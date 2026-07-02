@@ -57,6 +57,7 @@ public sealed class RegisterCustomerCommandHandler : IRequestHandler<RegisterCus
         };
 
         await _unitOfWork.CustomerRepo.AddAsync(customer, cancellationToken);
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         var token = _jwtTokenGenerator.GenerateCustomerToken(customer);
 

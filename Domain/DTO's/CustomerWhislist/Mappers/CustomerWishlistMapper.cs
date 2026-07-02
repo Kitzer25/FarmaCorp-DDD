@@ -11,4 +11,13 @@ public static class CustomerWishlistMapper
             AddedAt = wishlistItem.added_at
         };
     }
+
+    public static MostWishlistedVariantDto ToDto(this (int ProductVariantId, int Total) item)
+    {
+        return new MostWishlistedVariantDto
+        {
+            ProductVariantId = item.ProductVariantId,
+            TimesWishlisted = item.Total
+        };
+    }
 }

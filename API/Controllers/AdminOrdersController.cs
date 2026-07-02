@@ -1,9 +1,11 @@
 using System.Security.Claims;
+using Application.UseCases.OrderUseCase.Commands;
+using Application.UseCases.OrderUseCase.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Domain.Ports.Services;
 using Domain.Commons;
-using Domain.Ports.Services.EServices;
+using Domain.DTO_s.Orders;
+using MediatR;
 
 namespace API.Controllers;
 
@@ -12,20 +14,24 @@ namespace API.Controllers;
 [Route("api/v1/admin/orders")]
 public class AdminOrdersController : ControllerBase
 {
-    private readonly IOrderService _orderService;
+    private readonly IMediator _mediator;
 
-    public AdminOrdersController(IOrderService orderService)
+    public AdminOrdersController(IMediator mediator)
     {
-        _orderService = orderService;
+        _mediator = mediator;
     }
 
     [HttpGet("next-number")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetNextOrderNumber(CancellationToken ct)
     {
-        return Ok(new { orderNumber = await _orderService.GenerateOrderNumberAsync(ct) });
+        var orderNumber = await _mediator.Send(new GETGenerateOrderNumberQuery(), ct);
+        return Ok(new { orderNumber });
     }
 
     [HttpPatch("{orderId:int}/status")]
+    [ProducesResponseType(typeof(OrderDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> ChangeStatus(int orderId, ChangeOrderStatusRequest request, CancellationToken ct)
     {
         if (request.StatusId <= 0)
@@ -33,15 +39,14 @@ public class AdminOrdersController : ControllerBase
             return BadRequest(new { message = "El estado es obligatorio." });
         }
 
-        try
+        var result = await _mediator.Send(new PATCHChangeOrderStatusCommand
         {
-            var result = await _orderService.ChangeStatusAsync(orderId, request.StatusId, GetUserId(), request.Notes, ct);
-            return Ok(result);
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
+            OrderId = orderId,
+            StatusId = request.StatusId,
+            ChangedByUserId = GetUserId(),
+            Notes = request.Notes
+        }, ct);
+        return Ok(result);
     }
 
     private int? GetUserId()

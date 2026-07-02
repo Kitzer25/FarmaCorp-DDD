@@ -57,6 +57,7 @@ public sealed class LoginCustomerCommandHandler : IRequestHandler<LoginCustomerC
         customer.last_login_at = DateTime.UtcNow;
 
         await _unitOfWork.CustomerRepo.UpdateAsync(customer.customer_id, customer, cancellationToken);
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         var token = _jwtTokenGenerator.GenerateCustomerToken(customer);
 

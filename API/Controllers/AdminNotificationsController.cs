@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Domain.Ports.Services;
+using Application.UseCases.Notification.Commands;
 using Domain.Commons;
-using Domain.Ports.Services.EServices;
+using MediatR;
 
 namespace API.Controllers;
 
@@ -11,17 +11,23 @@ namespace API.Controllers;
 [Route("api/v1/admin/notifications")]
 public class AdminNotificationsController : ControllerBase
 {
-    private readonly IEmailService _emailService;
+    private readonly IMediator _mediator;
 
-    public AdminNotificationsController(IEmailService emailService)
+    public AdminNotificationsController(IMediator mediator)
     {
-        _emailService = emailService;
+        _mediator = mediator;
     }
 
     [HttpPost("order-confirmation/test")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> TestOrderConfirmation(TestOrderEmailRequest request, CancellationToken ct)
     {
-        await _emailService.SendOrderConfirmationAsync(request.Email, request.OrderNumber, request.Total, ct);
+        await _mediator.Send(new POSTSendOrderConfirmationCommand
+        {
+            Email = request.Email,
+            OrderNumber = request.OrderNumber,
+            Total = request.Total
+        }, ct);
 
         return Ok(new { message = "Correo simulado registrado en consola." });
     }

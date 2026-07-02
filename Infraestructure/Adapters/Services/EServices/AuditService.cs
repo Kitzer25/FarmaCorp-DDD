@@ -38,6 +38,7 @@ public class AuditService : IAuditService
             customerId);
 
         await _unitOfWork.AuditLogRepo.AddAsync(log, ct);
+        await _unitOfWork.SaveChangesAsync(ct);
     }
 
     public async Task<IEnumerable<AuditLogDto>> GetByRecordAsync(string tableName, string recordId, CancellationToken ct)

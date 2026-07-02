@@ -47,29 +47,4 @@ public static class CategoryMapper
 
         return dto;
     }
-
-    public static Category ToEntity(this CreateCategoryDto dto)
-    {
-        return new Category
-        {
-            name = dto.Name,
-            slug = dto.Slug,
-            description = dto.Description,
-            parent_category_id = dto.ParentCategoryId,
-            sort_order = dto.SortOrder,
-            is_active = true,
-            created_at = DateTime.UtcNow
-        };
-    }
-
-    public static void ApplyUpdate(this Category category, UpdateCategoryDto dto)
-    {
-        category.name = dto.Name;
-        category.slug = dto.Slug;
-        category.description = dto.Description;
-        category.parent_category_id = dto.ParentCategoryId;
-        category.sort_order = dto.SortOrder;
-        category.is_active = dto.IsActive;
-        category.updated_at = DateTime.UtcNow;
-    }
 }

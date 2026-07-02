@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infraestructure.Adapters.Repositories;
 
-public class GRepositories<T> : IGRepositories<T> 
+public class GRepositories<T> : IGRepositories<T>
     where T : class
 {
     protected readonly AppDbContext _context;
@@ -15,7 +15,6 @@ public class GRepositories<T> : IGRepositories<T>
         _context = context;
         _dbSet = context.Set<T>();
     }
-
 
     public async Task<IEnumerable<T>> GetAllAsync(CancellationToken ct)
     {
@@ -29,20 +28,18 @@ public class GRepositories<T> : IGRepositories<T>
 
     public async Task AddAsync(T entity, CancellationToken ct)
     {
-        await  _dbSet.AddAsync(entity, ct);
-        await _context.SaveChangesAsync(ct);
+        await _dbSet.AddAsync(entity, ct);
     }
 
-    public async Task UpdateAsync(int id, T entity, CancellationToken ct)
+    public Task UpdateAsync(int id, T entity, CancellationToken ct)
     {
         _dbSet.Update(entity);
-        await _context.SaveChangesAsync(ct);
+        return Task.CompletedTask;
     }
 
-    public async Task<bool> DeleteAsync(T entity, CancellationToken ct)
+    public Task<bool> DeleteAsync(T entity, CancellationToken ct)
     {
         _dbSet.Remove(entity);
-        await _context.SaveChangesAsync(ct);
-        return true;
+        return Task.FromResult(true);
     }
 }

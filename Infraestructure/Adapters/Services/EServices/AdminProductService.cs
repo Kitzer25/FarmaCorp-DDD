@@ -2,6 +2,7 @@ using System.Text;
 using Domain.Ports;
 using Domain.Ports.Services;
 using Domain.DTO_s.AdminProducts;
+using Domain.DTO_s.AdminProducts.Mappers;
 using Domain.Entities;
 using Domain.Ports.Repositories;
 using Domain.Ports.Services.EServices;
@@ -44,9 +45,11 @@ public class AdminProductService : IAdminProductService
         };
 
         await _unitOfWork.ProductRepo.AddAsync(product, ct);
-        await _auditService.RegisterAsync("products", product.product_id.ToString(), "CREATE", null, ToDto(product), null, null, ct);
+        await _unitOfWork.SaveChangesAsync(ct);
 
-        return ToDto(product);
+        await _auditService.RegisterAsync("products", product.product_id.ToString(), "CREATE", null, product.ToDto(), null, null, ct);
+
+        return product.ToDto();
     }
 
     public async Task<ProductAdminDto> UpdateAsync(int productId, SaveProductAdminDto request, CancellationToken ct)
@@ -63,7 +66,7 @@ public class AdminProductService : IAdminProductService
         var slug = BuildSlug(request);
         await EnsureSlugAvailableAsync(slug, productId, ct);
 
-        var before = ToDto(product);
+        var before = product.ToDto();
         product.name = request.Name.Trim();
         product.generic_name = request.GenericName;
         product.description = request.Description;
@@ -78,9 +81,9 @@ public class AdminProductService : IAdminProductService
         product.updated_at = DateTime.UtcNow;
 
         await _unitOfWork.ProductRepo.UpdateAsync(product.product_id, product, ct);
-        await _auditService.RegisterAsync("products", product.product_id.ToString(), "UPDATE", before, ToDto(product), null, null, ct);
+        await _auditService.RegisterAsync("products", product.product_id.ToString(), "UPDATE", before, product.ToDto(), null, null, ct);
 
-        return ToDto(product);
+        return product.ToDto();
     }
 
     public async Task SoftDeleteAsync(int productId, CancellationToken ct)
@@ -92,13 +95,13 @@ public class AdminProductService : IAdminProductService
             throw new InvalidOperationException("El producto no existe.");
         }
 
-        var before = ToDto(product);
+        var before = product.ToDto();
         product.is_active = false;
         product.deleted_at = DateTime.UtcNow;
         product.updated_at = DateTime.UtcNow;
 
         await _unitOfWork.ProductRepo.UpdateAsync(product.product_id, product, ct);
-        await _auditService.RegisterAsync("products", product.product_id.ToString(), "SOFT_DELETE", before, ToDto(product), null, null, ct);
+        await _auditService.RegisterAsync("products", product.product_id.ToString(), "SOFT_DELETE", before, product.ToDto(), null, null, ct);
     }
 
     private async Task EnsureSlugAvailableAsync(string slug, int? currentProductId, CancellationToken ct)
@@ -148,25 +151,5 @@ public class AdminProductService : IAdminProductService
         }
 
         return builder.ToString().Trim('-');
-    }
-
-    private static ProductAdminDto ToDto(Product product)
-    {
-        return new ProductAdminDto
-        {
-            ProductId = product.product_id,
-            Name = product.name,
-            GenericName = product.generic_name,
-            Description = product.description,
-            ShortDescription = product.short_description,
-            CategoryId = product.category_id,
-            LaboratoryId = product.laboratory_id,
-            RequiresPrescription = product.requires_prescription,
-            IsControlled = product.is_controlled,
-            ActiveIngredient = product.active_ingredient,
-            Slug = product.slug,
-            Tags = product.tags,
-            IsActive = product.is_active
-        };
     }
 }

@@ -39,6 +39,7 @@ public class CustomerWishlistService : ICustomerWishlistService
         };
 
         await _unitOfWork.CustomerWishlistRepo.AddAsync(item, ct);
+        await _unitOfWork.SaveChangesAsync(ct);
 
         return item.ToDto();
     }
@@ -52,17 +53,16 @@ public class CustomerWishlistService : ICustomerWishlistService
             return false;
         }
 
-        return await _unitOfWork.CustomerWishlistRepo.DeleteAsync(item, ct);
+        await _unitOfWork.CustomerWishlistRepo.DeleteAsync(item, ct);
+        await _unitOfWork.SaveChangesAsync(ct);
+
+        return true;
     }
 
     public async Task<IEnumerable<MostWishlistedVariantDto>> GetMostWishlistedAsync(int top, CancellationToken ct)
     {
         var results = await _unitOfWork.CustomerWishlistRepo.GetMostWishlistedAsync(top, ct);
 
-        return results.Select(r => new MostWishlistedVariantDto
-        {
-            ProductVariantId = r.ProductVariantId,
-            TimesWishlisted = r.Total
-        });
+        return results.Select(r => r.ToDto());
     }
 }

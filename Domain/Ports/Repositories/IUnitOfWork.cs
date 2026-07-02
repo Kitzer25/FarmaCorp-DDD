@@ -7,6 +7,12 @@ public interface IUnitOfWork : IDisposable
     public IGRepositories<T> Repositories<T>() where T : class;
     
     Task<int> SaveChangesAsync(CancellationToken ct);
+
+    Task BeginTransactionAsync(CancellationToken ct);
+
+    Task CommitTransactionAsync(CancellationToken ct);
+
+    Task RollbackTransactionAsync(CancellationToken ct);
     
     //Repositories
     public IAuditLogRepository AuditLogRepo { get; }

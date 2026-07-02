@@ -24,6 +24,14 @@ public class ErrorHandlingMiddleware
         {
             await WriteErrorAsync(context, HttpStatusCode.Forbidden, ex.Message);
         }
+        catch (KeyNotFoundException ex)
+        {
+            await WriteErrorAsync(context, HttpStatusCode.NotFound, ex.Message);
+        }
+        catch (ArgumentException ex)
+        {
+            await WriteErrorAsync(context, HttpStatusCode.BadRequest, ex.Message);
+        }
         catch (InvalidOperationException ex)
         {
             await WriteErrorAsync(context, HttpStatusCode.BadRequest, ex.Message);

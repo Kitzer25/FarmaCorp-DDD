@@ -1,11 +1,14 @@
 using API.Contracts.Auth;
 using Application.UseCases.Auth.Commands;
+using Domain.DTO_s.Auth;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
 [ApiController]
+[AllowAnonymous]
 [Route("api/v1/admin/auth")]
 public class AdminAuthController : ControllerBase
 {
@@ -17,6 +20,9 @@ public class AdminAuthController : ControllerBase
     }
 
     [HttpPost("login")]
+    [ProducesResponseType(typeof(AuthResponseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> Login(
         [FromBody] LoginRequest request,
         CancellationToken ct)

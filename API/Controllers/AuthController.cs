@@ -1,11 +1,14 @@
 using API.Contracts.Auth;
 using Application.UseCases.Auth.Commands;
+using Domain.DTO_s.Auth;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
 [ApiController]
+[AllowAnonymous]
 [Route("api/v1/auth")]
 public class AuthController : ControllerBase
 {
@@ -17,6 +20,8 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("register")]
+    [ProducesResponseType(typeof(AuthResponseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Register(
         [FromBody] RegisterCustomerRequest request,
         CancellationToken ct)
@@ -41,28 +46,24 @@ public class AuthController : ControllerBase
             return BadRequest(new { message = "El apellido es obligatorio." });
         }
 
-        try
+        var command = new RegisterCustomerCommand
         {
-            var command = new RegisterCustomerCommand
-            {
-                Email = request.Email,
-                Password = request.Password,
-                FirstName = request.FirstName,
-                LastName = request.LastName,
-                Phone = request.Phone
-            };
+            Email = request.Email,
+            Password = request.Password,
+            FirstName = request.FirstName,
+            LastName = request.LastName,
+            Phone = request.Phone
+        };
 
-            var result = await _mediator.Send(command, ct);
+        var result = await _mediator.Send(command, ct);
 
-            return Ok(result);
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
+        return Ok(result);
     }
 
     [HttpPost("login")]
+    [ProducesResponseType(typeof(AuthResponseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> Login(
         [FromBody] LoginRequest request,
         CancellationToken ct)

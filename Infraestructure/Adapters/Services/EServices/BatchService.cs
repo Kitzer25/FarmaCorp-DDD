@@ -80,6 +80,7 @@ public class BatchService : IBatchService
         };
 
         await _unitOfWork.ProductBatchRepo.AddAsync(batch, ct);
+        await _unitOfWork.SaveChangesAsync(ct);
 
         return batch.ToDto();
     }

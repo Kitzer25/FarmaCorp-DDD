@@ -1,9 +1,10 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Domain.Ports.Services;
+using Application.UseCases.BatchUseCase.Queries;
+using Application.UseCases.BatchUseCase.Commands;
 using Domain.Commons;
 using Domain.DTO_s.Batches;
-using Domain.Ports.Services.EServices;
+using MediatR;
 
 namespace API.Controllers;
 
@@ -12,30 +13,33 @@ namespace API.Controllers;
 [Route("api/v1/admin/batches")]
 public class AdminBatchesController : ControllerBase
 {
-    private readonly IBatchService _batchService;
+    private readonly IMediator _mediator;
 
-    public AdminBatchesController(IBatchService batchService)
+    public AdminBatchesController(IMediator mediator)
     {
-        _batchService = batchService;
+        _mediator = mediator;
     }
 
     [HttpGet]
+    [ProducesResponseType(typeof(IEnumerable<ProductBatchDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetBatches(CancellationToken ct)
     {
-        return Ok(await _batchService.GetBatchesAsync(ct));
+        return Ok(await _mediator.Send(new GETBatchesQuery(), ct));
+    }
+
+    [HttpGet("expiring")]
+    [ProducesResponseType(typeof(IEnumerable<ExpiringBatchDto>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetExpiringBatches(CancellationToken ct)
+    {
+        return Ok(await _mediator.Send(new GETExpiringBatchesQuery(), ct));
     }
 
     [HttpPost]
+    [ProducesResponseType(typeof(ProductBatchDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Create(CreateProductBatchDto request, CancellationToken ct)
     {
-        try
-        {
-            var result = await _batchService.CreateAsync(request, ct);
-            return Ok(result);
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
+        var result = await _mediator.Send(new POSTCreateBatchCommand { Request = request }, ct);
+        return Ok(result);
     }
 }
