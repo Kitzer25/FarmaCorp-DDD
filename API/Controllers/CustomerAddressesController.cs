@@ -1,13 +1,11 @@
 using System.Security.Claims;
 using API.Contracts.CustomerAddresses;
 using Application.UseCases.CustomerAddress.Commands;
-using Domain.Ports;
+using Application.UseCases.CustomerAddress.Querys;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Domain.Commons;
-using Domain.DTO_s.CustomerAddresses;
-using Domain.Ports.Repositories;
 
 namespace API.Controllers;
 
@@ -16,12 +14,10 @@ namespace API.Controllers;
 [Route("api/v1/customer/addresses")]
 public class CustomerAddressesController : ControllerBase
 {
-    private readonly IUnitOfWork _unitOfWork;
     private readonly IMediator _mediator;
 
-    public CustomerAddressesController(IUnitOfWork unitOfWork, IMediator mediator)
+    public CustomerAddressesController(IMediator mediator)
     {
-        _unitOfWork = unitOfWork;
         _mediator = mediator;
     }
 
@@ -29,9 +25,9 @@ public class CustomerAddressesController : ControllerBase
     public async Task<IActionResult> GetMyAddresses(CancellationToken ct)
     {
         var customerId = GetCustomerId();
-        var addresses = await _unitOfWork.CustomerAddressRepo.GetActiveByCustomerIdAsync(customerId, ct);
+        var addresses = await _mediator.Send(new GetCustomerAddressesQuery { CustomerId = customerId }, ct);
 
-        return Ok(addresses.Select(CustomerAddressMapper.ToDto));
+        return Ok(addresses);
     }
 
     [HttpPost]
