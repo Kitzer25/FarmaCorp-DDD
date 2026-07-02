@@ -1,11 +1,14 @@
 using System.Net.Mime;
+using System.Reflection;
 using Domain.Ports;
 using Domain.Ports.Repositories;
 using Domain.Ports.Repositories.ERepository;
 using Domain.Ports.Services.AuthService;
+using Domain.Ports.Services.EServices;
 using Infraestructure.Adapters.Repositories;
 using Infraestructure.Adapters.Repositories.ERepository;
 using Infraestructure.Adapters.Services.AuthService;
+using Infraestructure.Adapters.Services.EServices;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Infraestructure.Configuration;
@@ -20,7 +23,7 @@ public static class DependencyInjection
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped(typeof(IGRepositories<>), typeof(GRepositories<>));
         
-        //Interface - Implementacion
+        //Repositories: Interface - Implementacion
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IRoleRepository, RoleRepository>();
         services.AddScoped<IProductRepository, ProductRepository>();
@@ -51,7 +54,28 @@ public static class DependencyInjection
         services.AddScoped<IDrugFormRepository, DrugFormRepository>();
         services.AddScoped<IMeasurementUnitRepository, MeasurementUnitRepository>();
         services.AddScoped<IDiscountTypeRepository, DiscountTypeRepository>();
-
+        
+        //Services: Interfaz - Implementacion
+        services.AddScoped<JwtTokenGenerator>();
+        services.AddScoped<ICartService, CartService>();
+        services.AddScoped<IOrderService, OrderService>();
+        services.AddScoped<IPrescriptionService, PrescriptionService>();
+        services.AddScoped<IInventoryAdminService, InventoryAdminService>();
+        services.AddScoped<IBatchService, BatchService>();
+        services.AddScoped<IAdminProductService, AdminProductService>();
+        services.AddScoped<IPromotionService, PromotionService>();
+        services.AddScoped<IReportService, ReportService>();
+        services.AddScoped<IEmailService, SimulatedEmailService>();
+        services.AddScoped<IAuditService, AuditService>();
+        services.AddScoped<IProductService, ProductService>();
+        services.AddScoped<ICategoryService, CategoryService>();
+        services.AddScoped<ILaboratoryService, LaboratoryService>();
+        services.AddScoped<IDrugFormService, DrugFormService>();
+        services.AddScoped<IMeasurementUnitService, MeasurementUnitService>();
+        services.AddScoped<IDiscountTypeService, DiscountTypeService>();
+        services.AddScoped<IProductImageService, ProductImageService>();
+        services.AddScoped<ICustomerWishlistService, CustomerWishlistService>();
+        
         //Security
         services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
         services.AddScoped<IHashPassword, HashPassword>();
