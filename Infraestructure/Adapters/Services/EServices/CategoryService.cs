@@ -1,8 +1,11 @@
-using Core.DTO_s.Products;
-using Core.Ports;
-using Core.Ports.Repositories;
-using Core.Ports.Services;
-using Core.Ports.Services.EServices;
+using Domain.DTO_s.Categories;
+using Domain.DTO_s.Categories.Mappers;
+using Domain.Entities;
+using Domain.Ports;
+using Domain.Ports.Services;
+using Domain.Ports.Repositories;
+using Domain.Ports.Services.EServices;
+using CategoryDto = Domain.DTO_s.Products.CategoryDto;
 
 namespace Infraestructure.Adapters.Services.EServices;
 
@@ -17,32 +20,59 @@ public class CategoryService : ICategoryService
 
     public async Task<List<CategoryDto>> GetCategoriesAsync(CancellationToken ct)
     {
-        var categories = await _unitOfWork.CategoryRepo.GetActiveAsync(ct);
+        IEnumerable<Category> categories = await _unitOfWork.CategoryRepo.GetActiveAsync(ct);
+        return CategoryMapper.ToDtoTree(categories);
+    }
 
-        // Solo categorías raíz, las subcategorías van anidadas dentro
-        return categories
-            .Where(c => c.parent_category_id == null)
-            .OrderBy(c => c.sort_order)
-            .Select(c => new CategoryDto
-            {
-                CategoryId       = c.category_id,
-                Name             = c.name,
-                Slug             = c.slug,
-                Description      = c.description,
-                ParentCategoryId = c.parent_category_id,
-                SortOrder        = c.sort_order,
-                SubCategories    = categories
-                    .Where(s => s.parent_category_id == c.category_id)
-                    .OrderBy(s => s.sort_order)
-                    .Select(s => new CategoryDto
-                    {
-                        CategoryId       = s.category_id,
-                        Name             = s.name,
-                        Slug             = s.slug,
-                        Description      = s.description,
-                        ParentCategoryId = s.parent_category_id,
-                        SortOrder        = s.sort_order
-                    }).ToList()
-            }).ToList();
+    public Task<IEnumerable<Category>> GetAllAsync(CancellationToken ct)
+    {
+        throw new NotImplementedException();
+    }
+
+    Task<Category?> IGRepositories<Category>.GetByIdAsync(int id, CancellationToken ct)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task AddAsync(Category entity, CancellationToken ct)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task UpdateAsync(int id, Category entity, CancellationToken ct)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<bool> DeleteAsync(Category entity, CancellationToken ct)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<CategoryDto?> GetByIdAsync(int categoryId, CancellationToken ct)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<CategoryDto> CreateAsync(CreateCategoryDto dto, CancellationToken ct)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<CategoryDto> UpdateAsync(int categoryId, UpdateCategoryDto dto, CancellationToken ct)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<bool> DeleteAsync(int categoryId, CancellationToken ct)
+    {
+        var category = await _unitOfWork.CategoryRepo.GetByIdAsync(categoryId, ct);
+
+        if (category == null)
+        {
+            return false;
+        }
+
+        return await _unitOfWork.CategoryRepo.DeleteAsync(category, ct);
     }
 }

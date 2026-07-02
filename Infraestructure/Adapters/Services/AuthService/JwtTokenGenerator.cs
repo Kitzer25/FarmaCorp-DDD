@@ -1,9 +1,9 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Core.Commons;
-using Core.Entities;
-using Core.Ports.Services.AuthService;
+using Domain.Commons;
+using Domain.Entities;
+using Domain.Ports.Services.AuthService;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 

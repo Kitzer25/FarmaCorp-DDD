@@ -1,9 +1,10 @@
-using Core.DTO_s.Cart;
-using Core.Entities;
-using Core.Ports;
-using Core.Ports.Repositories;
-using Core.Ports.Services;
-using Core.Ports.Services.EServices;
+using Domain.Ports;
+using Domain.Ports.Services;
+using Domain.DTO_s.Cart;
+using Domain.DTO_s.Cart.Mappers;
+using Domain.Entities;
+using Domain.Ports.Repositories;
+using Domain.Ports.Services.EServices;
 
 namespace Infraestructure.Adapters.Services.EServices;
 
@@ -19,7 +20,6 @@ public class CartService : ICartService
     public async Task<CartDto> GetActiveCartAsync(int customerId, CancellationToken ct)
     {
         var cart = await GetOrCreateActiveCartAsync(customerId, ct);
-
         return CartMapper.ToDto(cart);
     }
 
@@ -62,7 +62,16 @@ public class CartService : ICartService
         return await GetActiveCartAsync(customerId, ct);
     }
 
-    private async Task<Core.Entities.Cart> GetOrCreateActiveCartAsync(int customerId, CancellationToken ct)
+    public async Task<CartDto> RemoveItemAsync(int customerId, int cartItemId, CancellationToken ct)
+    {
+        var cartItem = await GetOwnedCartItemAsync(customerId, cartItemId, ct);
+
+        await _unitOfWork.CartItemRepo.DeleteAsync(cartItem, ct);
+
+        return await GetActiveCartAsync(customerId, ct);
+    }
+
+    private async Task<Cart> GetOrCreateActiveCartAsync(int customerId, CancellationToken ct)
     {
         var cart = await _unitOfWork.CartRepo.GetActiveByCustomerIdWithItemsAsync(customerId, ct);
 
@@ -71,7 +80,7 @@ public class CartService : ICartService
             return cart;
         }
 
-        cart = new Core.Entities.Cart
+        cart = new Cart
         {
             customer_id = customerId,
             is_active = true,
@@ -106,7 +115,7 @@ public class CartService : ICartService
 
         if (cartItem.cart.customer_id != customerId)
         {
-            throw new UnauthorizedAccessException("No puedes actualizar items de otro cliente.");
+            throw new UnauthorizedAccessException("No puedes modificar items de otro cliente.");
         }
 
         return cartItem;

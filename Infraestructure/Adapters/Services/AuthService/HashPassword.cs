@@ -1,4 +1,4 @@
-using Core.Ports.Services.AuthService;
+using Domain.Ports.Services.AuthService;
 
 namespace Infraestructure.Adapters.Services.AuthService;
 

@@ -1,9 +1,11 @@
 using System.Text.Json;
-using Core.Entities;
-using Core.Ports;
-using Core.Ports.Repositories;
-using Core.Ports.Services;
-using Core.Ports.Services.EServices;
+using Domain.DTO_s.AuditLog;
+using Domain.DTO_s.AuditLog.Mappers;
+using Domain.Ports;
+using Domain.Ports.Services;
+using Domain.Entities;
+using Domain.Ports.Repositories;
+using Domain.Ports.Services.EServices;
 
 namespace Infraestructure.Adapters.Services.EServices;
 
@@ -26,16 +28,33 @@ public class AuditService : IAuditService
         int? customerId,
         CancellationToken ct)
     {
-        await _unitOfWork.Repositories<AuditLog>().AddAsync(new AuditLog
-        {
-            table_name = tableName,
-            record_id = recordId,
-            action = action,
-            old_values = oldValues == null ? null : JsonSerializer.Serialize(oldValues),
-            new_values = newValues == null ? null : JsonSerializer.Serialize(newValues),
-            user_id = userId,
-            customer_id = customerId,
-            created_at = DateTime.UtcNow
-        }, ct);
+        var log = AuditLogMapper.ToEntity(
+            tableName,
+            recordId,
+            action,
+            oldValues == null ? null : JsonSerializer.Serialize(oldValues),
+            newValues == null ? null : JsonSerializer.Serialize(newValues),
+            userId,
+            customerId);
+
+        await _unitOfWork.AuditLogRepo.AddAsync(log, ct);
+    }
+
+    public async Task<IEnumerable<AuditLogDto>> GetByRecordAsync(string tableName, string recordId, CancellationToken ct)
+    {
+        var logs = await _unitOfWork.AuditLogRepo.GetByRecordAsync(tableName, recordId, ct);
+        return logs.Select(l => l.ToDto());
+    }
+
+    public async Task<IEnumerable<AuditLogDto>> GetByUserAsync(int userId, DateTime from, DateTime to, CancellationToken ct)
+    {
+        var logs = await _unitOfWork.AuditLogRepo.GetByUserAsync(userId, from, to, ct);
+        return logs.Select(l => l.ToDto());
+    }
+
+    public async Task<IEnumerable<AuditLogDto>> GetByDateRangeAsync(DateTime from, DateTime to, CancellationToken ct)
+    {
+        var logs = await _unitOfWork.AuditLogRepo.GetByDateRangeAsync(from, to, ct);
+        return logs.Select(l => l.ToDto());
     }
 }

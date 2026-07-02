@@ -1,9 +1,10 @@
-using Core.DTO_s.Batches;
-using Core.Entities;
-using Core.Ports;
-using Core.Ports.Repositories;
-using Core.Ports.Services;
-using Core.Ports.Services.EServices;
+using Domain.Ports;
+using Domain.Ports.Services;
+using Domain.DTO_s.Batches;
+using Domain.DTO_s.Batches.Mappers;
+using Domain.Entities;
+using Domain.Ports.Repositories;
+using Domain.Ports.Services.EServices;
 
 namespace Infraestructure.Adapters.Services.EServices;
 
@@ -20,7 +21,14 @@ public class BatchService : IBatchService
     {
         var batches = await _unitOfWork.ProductBatchRepo.GetAllWithProductAsync(ct);
 
-        return batches.Select(ToDto);
+        return batches.Select(b => b.ToDto());
+    }
+
+    public async Task<IEnumerable<ExpiringBatchDto>> GetExpiringBatchesAsync(CancellationToken ct)
+    {
+        var expiringBatches = await _unitOfWork.VExpiringBatchRepo.GetAllAsync(ct);
+
+        return expiringBatches.Select(b => b.ToExpiringDto());
     }
 
     public async Task<ProductBatchDto> CreateAsync(CreateProductBatchDto request, CancellationToken ct)
@@ -73,25 +81,6 @@ public class BatchService : IBatchService
 
         await _unitOfWork.ProductBatchRepo.AddAsync(batch, ct);
 
-        return ToDto(batch);
-    }
-
-    private static ProductBatchDto ToDto(ProductBatch batch)
-    {
-        return new ProductBatchDto
-        {
-            BatchId = batch.batch_id,
-            ProductVariantId = batch.product_variant_id,
-            ProductName = batch.product_variant?.product?.name,
-            Sku = batch.product_variant?.sku,
-            LaboratoryId = batch.laboratory_id,
-            BatchNumber = batch.batch_number,
-            ManufactureDate = batch.manufacture_date,
-            ExpirationDate = batch.expiration_date,
-            InitialQuantity = batch.initial_quantity,
-            CurrentQuantity = batch.current_quantity,
-            IsActive = batch.is_active,
-            Notes = batch.notes
-        };
+        return batch.ToDto();
     }
 }

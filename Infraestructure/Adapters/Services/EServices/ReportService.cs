@@ -1,8 +1,8 @@
-using Core.DTO_s.Reports;
-using Core.Ports;
-using Core.Ports.Repositories;
-using Core.Ports.Services;
-using Core.Ports.Services.EServices;
+using Domain.Ports;
+using Domain.Ports.Services;
+using Domain.DTO_s.Reports;
+using Domain.Ports.Repositories;
+using Domain.Ports.Services.EServices;
 
 namespace Infraestructure.Adapters.Services.EServices;
 
@@ -19,14 +19,15 @@ public class ReportService : IReportService
     {
         var orders = (await _unitOfWork.OrderRepo.GetAllAsync(ct)).ToList();
         var orderItems = (await _unitOfWork.OrderItemRepo.GetAllAsync(ct)).ToList();
-        var inventory = await _unitOfWork.InventoryRepo.GetAllWithProductAsync(ct);
+        var orderSummaries = await _unitOfWork.VCustomerOrderSumaryRepo.GetAllAsync(ct);
+        var availableStock = await _unitOfWork.VAvalibleStockRepo.GetAllAsync(ct);
 
         return new DashboardSummaryDto
         {
-            TotalOrders = orders.Count,
+            TotalOrders = (int)orderSummaries.Sum(s => s.total_orders ?? 0),
             TotalRevenueOrders = orders.Count(o => o.total > 0),
-            TotalSales = orders.Sum(o => o.total),
-            LowStockProducts = inventory.Count(i => Math.Max(0, i.quantity_on_hand - i.reserved_quantity) <= i.min_stock_level),
+            TotalSales = orderSummaries.Sum(s => s.total_spent ?? 0),
+            LowStockProducts = availableStock.Count(s => s.is_low_stock == true),
             TopProducts = orderItems
                 .GroupBy(i => new { i.product_variant_id, i.product_name_snapshot, i.sku_snapshot })
                 .OrderByDescending(g => g.Sum(i => i.quantity))
