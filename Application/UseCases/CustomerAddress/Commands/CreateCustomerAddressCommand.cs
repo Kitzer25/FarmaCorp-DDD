@@ -1,6 +1,5 @@
-using Core.DTO_s.CustomerAddresses;
-using Core.Ports;
-using Core.Ports.Repositories;
+using Domain.DTO_s.CustomerAddresses;
+using Domain.Ports.Repositories;
 using MediatR;
 
 namespace Application.UseCases.CustomerAddress.Commands;
@@ -36,7 +35,7 @@ public class CreateCustomerAddressCommandHandler : IRequestHandler<CreateCustome
             await _unitOfWork.CustomerAddressRepo.ClearDefaultForCustomerAsync(request.CustomerId, null, cancellationToken);
         }
 
-        var address = new Core.Entities.CustomerAddress
+        var address = new Domain.Entities.CustomerAddress
         {
             customer_id = request.CustomerId,
             label = request.Label,

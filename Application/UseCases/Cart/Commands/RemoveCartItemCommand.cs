@@ -1,6 +1,5 @@
-using Core.DTO_s.Cart;
-using Core.Ports;
-using Core.Ports.Repositories;
+using Domain.DTO_s.Cart;
+using Domain.Ports.Repositories;
 using MediatR;
 
 namespace Application.UseCases.Cart.Commands;

@@ -1,4 +1,4 @@
-using Core.Ports.Services.EServices;
+using Domain.Ports.Services.EServices;
 using MediatR;
 
 namespace Application.UseCases.Product.Commands;

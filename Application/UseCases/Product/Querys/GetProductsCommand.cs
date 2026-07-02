@@ -1,6 +1,6 @@
-using Core.DTO_s.Products;
-using Core.Ports.Services;
-using Core.Ports.Services.EServices;
+using Domain.Ports.Services;
+using Domain.DTO_s.Products;
+using Domain.Ports.Services.EServices;
 using MediatR;
 
 namespace Application.UseCases.Product.Querys;

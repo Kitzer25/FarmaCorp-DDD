@@ -1,5 +1,5 @@
-using Core.DTO_s.Inventory;
-using Core.Ports.Services.EServices;
+using Domain.DTO_s.Inventory;
+using Domain.Ports.Services.EServices;
 using MediatR;
 
 namespace Application.UseCases.Inventory.Querys;
