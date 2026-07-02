@@ -1,4 +1,4 @@
-﻿namespace Core.Entities;
+﻿namespace Domain.Entities;
 
 /// <summary>
 /// Estado actual del stock por variante. Permite consulta O(1) de disponibilidad sin sumar movimientos históricos.

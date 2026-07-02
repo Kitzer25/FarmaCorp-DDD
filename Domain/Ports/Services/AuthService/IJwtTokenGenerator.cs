@@ -1,7 +1,7 @@
 using System.Security.Claims;
-using Core.Entities;
+using Domain.Entities;
 
-namespace Core.Ports.Services.AuthService;
+namespace Domain.Ports.Services.AuthService;
 
 public interface IJwtTokenGenerator
 {

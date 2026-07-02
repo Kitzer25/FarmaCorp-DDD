@@ -1,6 +1,6 @@
-using Core.DTO_s.Products;
+using Domain.DTO_s.Products;
 
-namespace Core.Ports.Services.EServices;
+namespace Domain.Ports.Services.EServices;
 
 public interface IProductService
 {

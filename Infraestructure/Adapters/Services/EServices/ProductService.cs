@@ -1,8 +1,8 @@
-using Core.DTO_s.Products;
-using Core.Ports;
-using Core.Ports.Repositories;
-using Core.Ports.Services;
-using Core.Ports.Services.EServices;
+using Domain.Ports;
+using Domain.Ports.Services;
+using Domain.DTO_s.Products;
+using Domain.Ports.Repositories;
+using Domain.Ports.Services.EServices;
 
 namespace Infraestructure.Adapters.Services.EServices;
 

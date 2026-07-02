@@ -1,4 +1,4 @@
-﻿namespace Core.Entities;
+﻿namespace Domain.Entities;
 
 /// <summary>
 /// Determina cómo interpretar el campo discount_value en promotions. Seed: Percentage, FixedAmount.

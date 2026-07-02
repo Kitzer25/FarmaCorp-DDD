@@ -1,4 +1,4 @@
-﻿namespace Core.Entities;
+﻿namespace Domain.Entities;
 
 /// <summary>
 /// Tabla puente N:M. Permite asignar un producto a múltiples categorías (Ej: Ibuprofeno → Analgésicos y Antiinflamatorios). is_primary indica la categoría principal para navegación y filtros de catálogo.

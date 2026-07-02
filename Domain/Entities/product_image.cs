@@ -1,4 +1,4 @@
-﻿namespace Core.Entities;
+﻿namespace Domain.Entities;
 
 /// <summary>
 /// Imágenes a nivel de producto genérico o variante específica. Solo se guarda la URL; el archivo vive en Supabase Storage o CDN externo.

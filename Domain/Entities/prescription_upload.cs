@@ -1,4 +1,4 @@
-﻿namespace Core.Entities;
+﻿namespace Domain.Entities;
 
 /// <summary>
 /// Recetas médicas subidas por clientes. Obligatoria para productos con requires_prescription = TRUE. El pedido no avanza a Processing sin verificación.

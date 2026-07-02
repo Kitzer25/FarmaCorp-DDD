@@ -1,4 +1,4 @@
-﻿namespace Core.Entities;
+﻿namespace Domain.Entities;
 
 /// <summary>
 /// Lotes de medicamentos con trazabilidad de vencimiento. Obligatorio para regulación farmacéutica. Lógica FEFO aplicada al despachar.

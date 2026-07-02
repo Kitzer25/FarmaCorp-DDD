@@ -1,6 +1,6 @@
-using Core.Entities;
+using Domain.Entities;
 
-namespace Core.DTO_s.CustomerAddresses;
+namespace Domain.DTO_s.CustomerAddresses;
 
 public static class CustomerAddressMapper
 {

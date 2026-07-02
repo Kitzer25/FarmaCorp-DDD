@@ -1,63 +1,41 @@
-using Core.Commons;
+using Application.UseCases.Product.Commands;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Core.DTO_s.AdminProducts;
-using Core.Ports.Services;
-using Core.Ports.Services.EServices;
+using Domain.Ports.Services;
+using Domain.DTO_s.AdminProducts;
+using MediatR;
 
 namespace API.Controllers;
 
 [ApiController]
-[Authorize(Policy = PolicyNames.SalesAccess)]
 [Route("api/v1/admin/products")]
-public class AdminProductsController : ControllerBase
+public sealed class AdminProductsController : ControllerBase
 {
-    private readonly IAdminProductService _productService;
+    private readonly IMediator _mediator;
 
-    public AdminProductsController(IAdminProductService productService)
+    public AdminProductsController(IMediator mediator)
     {
-        _productService = productService;
+        _mediator = mediator;
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(SaveProductAdminDto request, CancellationToken ct)
+    public async Task<IActionResult> Create(SaveProductAdminDto dto, CancellationToken ct)
     {
-        try
-        {
-            var result = await _productService.CreateAsync(request, ct);
-            return Ok(result);
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
+        var result = await _mediator.Send(new CreateAdminProductCommand { Request = dto }, ct);
+        return CreatedAtAction(nameof(Create), new { id = result.ProductId }, result);
     }
 
     [HttpPut("{productId:int}")]
-    public async Task<IActionResult> Update(int productId, SaveProductAdminDto request, CancellationToken ct)
+    public async Task<IActionResult> Update(int productId, SaveProductAdminDto dto, CancellationToken ct)
     {
-        try
-        {
-            var result = await _productService.UpdateAsync(productId, request, ct);
-            return Ok(result);
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
+        var result = await _mediator.Send(new UpdateAdminProductCommand { ProductId = productId, Request = dto }, ct);
+        return Ok(result);
     }
 
     [HttpDelete("{productId:int}")]
     public async Task<IActionResult> SoftDelete(int productId, CancellationToken ct)
     {
-        try
-        {
-            await _productService.SoftDeleteAsync(productId, ct);
-            return NoContent();
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
+        await _mediator.Send(new SoftDeleteAdminProductCommand(productId), ct);
+        return NoContent();
     }
 }

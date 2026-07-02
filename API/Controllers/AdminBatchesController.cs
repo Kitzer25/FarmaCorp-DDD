@@ -1,9 +1,9 @@
-using Core.Commons;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Core.DTO_s.Batches;
-using Core.Ports.Services;
-using Core.Ports.Services.EServices;
+using Domain.Ports.Services;
+using Domain.Commons;
+using Domain.DTO_s.Batches;
+using Domain.Ports.Services.EServices;
 
 namespace API.Controllers;
 

@@ -1,5 +1,6 @@
-using Core.Ports.Services;
-using Core.Ports.Services.EServices;
+using Domain.Ports;
+using Domain.Ports.Services;
+using Domain.Ports.Services.EServices;
 using Microsoft.Extensions.Logging;
 
 namespace Infraestructure.Adapters.Services.EServices;

@@ -1,4 +1,4 @@
-﻿namespace Core.Entities;
+﻿namespace Domain.Entities;
 
 /// <summary>
 /// Estados del ciclo de vida de un pedido. El historial de cambios se guarda en order_status_history.

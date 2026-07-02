@@ -1,6 +1,6 @@
-using Core.Ports.Repositories.ERepository;
+using Domain.Ports.Repositories.ERepository;
 
-namespace Core.Ports.Repositories;
+namespace Domain.Ports.Repositories;
 
 public interface IUnitOfWork : IDisposable
 {
@@ -9,6 +9,7 @@ public interface IUnitOfWork : IDisposable
     Task<int> SaveChangesAsync(CancellationToken ct);
     
     //Repositories
+    public IAuditLogRepository AuditLogRepo { get; }
     public IUserRepository UserRepo { get; }
     public IRoleRepository RoleRepo { get; }
 
@@ -35,6 +36,17 @@ public interface IUnitOfWork : IDisposable
 
     public IPromotionRepository PromotionRepo { get; }
     public IPromotionCodeRepository PromotionCodeRepo { get; }
-    
+
     public ICategoryRepository CategoryRepo { get; }
+
+    public IOrderStatusHistoryRepository OrderStatusHistoryRepo { get; }
+    public IVExpiringBatchRepository VExpiringBatchRepo { get; }
+    public IVAvalibleStockRepository VAvalibleStockRepo { get; }
+    public IVCustomerOrderSumaryRepository VCustomerOrderSumaryRepo { get; }
+    public IProductImageRepository ProductImageRepo { get; }
+    public ICustomerWishlistRepository CustomerWishlistRepo { get; }
+    public ILaboratoryRepository LaboratoryRepo { get; }
+    public IDrugFormRepository DrugFormRepo { get; }
+    public IMeasurementUnitRepository MeasurementUnitRepo { get; }
+    public IDiscountTypeRepository DiscountTypeRepo { get; }
 }

@@ -1,9 +1,9 @@
-using Core.DTO_s.Prescriptions;
-using Core.Entities;
-using Core.Ports;
-using Core.Ports.Repositories;
-using Core.Ports.Services;
-using Core.Ports.Services.EServices;
+using Domain.Ports;
+using Domain.Ports.Services;
+using Domain.DTO_s.Prescriptions;
+using Domain.Entities;
+using Domain.Ports.Repositories;
+using Domain.Ports.Services.EServices;
 
 namespace Infraestructure.Adapters.Services.EServices;
 

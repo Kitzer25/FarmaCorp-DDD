@@ -1,8 +1,8 @@
 using System.Net.Mime;
-using Core.Ports;
-using Core.Ports.Repositories;
-using Core.Ports.Repositories.ERepository;
-using Core.Ports.Services.AuthService;
+using Domain.Ports;
+using Domain.Ports.Repositories;
+using Domain.Ports.Repositories.ERepository;
+using Domain.Ports.Services.AuthService;
 using Infraestructure.Adapters.Repositories;
 using Infraestructure.Adapters.Repositories.ERepository;
 using Infraestructure.Adapters.Services.AuthService;
@@ -41,7 +41,17 @@ public static class DependencyInjection
         services.AddScoped<IPrescriptionUploadRepository, PrescriptionUploadRepository>();
         services.AddScoped<IPromotionRepository, PromotionRepository>();
         services.AddScoped<IPromotionCodeRepository, PromotionCodeRepository>();
-        
+        services.AddScoped<IOrderStatusHistoryRepository, OrderStatusHistoryRepository>();
+        services.AddScoped<IVExpiringBatchRepository, VExpiringBatchRepository>();
+        services.AddScoped<IVAvalibleStockRepository, VAvalibleStockRepository>();
+        services.AddScoped<IVCustomerOrderSumaryRepository, VCustomerOrderSumaryRepository>();
+        services.AddScoped<IProductImageRepository, ProductImageRepository>();
+        services.AddScoped<ICustomerWishlistRepository, CustomerWishlistRepository>();
+        services.AddScoped<ILaboratoryRepository, LaboratoryRepository>();
+        services.AddScoped<IDrugFormRepository, DrugFormRepository>();
+        services.AddScoped<IMeasurementUnitRepository, MeasurementUnitRepository>();
+        services.AddScoped<IDiscountTypeRepository, DiscountTypeRepository>();
+
         //Security
         services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
         services.AddScoped<IHashPassword, HashPassword>();

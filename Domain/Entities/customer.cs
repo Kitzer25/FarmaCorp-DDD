@@ -1,4 +1,4 @@
-﻿namespace Core.Entities;
+﻿namespace Domain.Entities;
 
 /// <summary>
 /// Compradores del eCommerce. Separados de users (personal interno) por tener flujos, permisos y datos distintos.

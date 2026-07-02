@@ -1,6 +1,6 @@
-using Core.DTO_s.Inventory;
+using Domain.DTO_s.Inventory;
 
-namespace Core.Ports.Services.EServices;
+namespace Domain.Ports.Services.EServices;
 
 public interface IInventoryAdminService
 {

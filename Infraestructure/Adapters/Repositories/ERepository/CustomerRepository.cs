@@ -1,6 +1,5 @@
-using Core.Entities;
-using Core.Ports.Repositories;
-using Core.Ports.Repositories.ERepository;
+using Domain.Entities;
+using Domain.Ports.Repositories.ERepository;
 using Infraestructure.Context;
 using Microsoft.EntityFrameworkCore;
 

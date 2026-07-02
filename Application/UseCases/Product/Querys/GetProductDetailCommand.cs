@@ -1,16 +1,16 @@
-using Core.DTO_s.Products;
-using Core.Ports.Services;
-using Core.Ports.Services.EServices;
+using Domain.Ports.Services;
+using Domain.DTO_s.Products;
+using Domain.Ports.Services.EServices;
 using MediatR;
 
 namespace Application.UseCases.Product.Querys;
 
-public class GetProductDetailCommand : IRequest<ProductDetailDto>
+public class GetProductDetailQuery : IRequest<ProductDetailDto>
 {
     public string Slug { get; set; } = null!;
 }
 
-public sealed class GetProductDetailCommandHandler : IRequestHandler<GetProductDetailCommand, ProductDetailDto>
+public sealed class GetProductDetailCommandHandler : IRequestHandler<GetProductDetailQuery, ProductDetailDto>
 {
     private readonly IProductService _productService;
 
@@ -19,7 +19,7 @@ public sealed class GetProductDetailCommandHandler : IRequestHandler<GetProductD
         _productService = productService;
     }
 
-    public async Task<ProductDetailDto> Handle(GetProductDetailCommand request, CancellationToken cancellationToken)
+    public async Task<ProductDetailDto> Handle(GetProductDetailQuery request, CancellationToken cancellationToken)
     {
         return await _productService.GetProductDetailAsync(request.Slug, cancellationToken);
     }

@@ -1,6 +1,6 @@
-using Core.DTO_s.Cart;
-using Core.Ports.Services;
-using Core.Ports.Services.EServices;
+using Domain.Ports.Services;
+using Domain.DTO_s.Cart;
+using Domain.Ports.Services.EServices;
 using MediatR;
 
 namespace Application.UseCases.Cart.Commands;

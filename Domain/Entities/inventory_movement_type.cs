@@ -1,4 +1,4 @@
-﻿namespace Core.Entities;
+﻿namespace Domain.Entities;
 
 /// <summary>
 /// Clasifica cada movimiento de inventario y su dirección. La cantidad en inventory_movements siempre es positiva.

@@ -1,6 +1,6 @@
-using Core.DTO_s.Reports;
+using Domain.DTO_s.Reports;
 
-namespace Core.Ports.Services.EServices;
+namespace Domain.Ports.Services.EServices;
 
 public interface IReportService
 {

@@ -1,9 +1,10 @@
-using Core.DTO_s.Orders;
-using Core.Entities;
-using Core.Ports;
-using Core.Ports.Repositories;
-using Core.Ports.Services;
-using Core.Ports.Services.EServices;
+using Domain.Ports;
+using Domain.Ports.Services;
+using Domain.DTO_s.Orders;
+using Domain.DTO_s.Orders.Mappers;
+using Domain.Entities;
+using Domain.Ports.Repositories;
+using Domain.Ports.Services.EServices;
 
 namespace Infraestructure.Adapters.Services.EServices;
 
@@ -114,7 +115,7 @@ public class OrderService : IOrderService
             created_at = DateTime.UtcNow
         }, ct);
 
-        await _unitOfWork.Repositories<OrderStatusHistory>().AddAsync(new OrderStatusHistory
+        await _unitOfWork.OrderStatusHistoryRepo.AddAsync(new OrderStatusHistory
         {
             order_id = order.order_id,
             order_status_id = pendingStatusId,
@@ -129,7 +130,7 @@ public class OrderService : IOrderService
         var savedOrder = await _unitOfWork.OrderRepo.GetByIdWithDetailsAsync(order.order_id, ct)
             ?? order;
 
-        return ToDto(savedOrder);
+        return savedOrder.ToDto();
     }
 
     public async Task<OrderDto> ChangeStatusAsync(int orderId, int statusId, int? changedByUserId, string? notes, CancellationToken ct)
@@ -153,7 +154,7 @@ public class OrderService : IOrderService
         order.updated_at = DateTime.UtcNow;
 
         await _unitOfWork.OrderRepo.UpdateAsync(order.order_id, order, ct);
-        await _unitOfWork.Repositories<OrderStatusHistory>().AddAsync(new OrderStatusHistory
+        await _unitOfWork.OrderStatusHistoryRepo.AddAsync(new OrderStatusHistory
         {
             order_id = order.order_id,
             order_status_id = statusId,
@@ -175,7 +176,7 @@ public class OrderService : IOrderService
         var updated = await _unitOfWork.OrderRepo.GetByIdWithDetailsAsync(orderId, ct)
             ?? order;
 
-        return ToDto(updated);
+        return updated.ToDto();
     }
 
     private async Task EnsureStockAvailableAsync(int productVariantId, int requestedQuantity, CancellationToken ct)
@@ -212,34 +213,5 @@ public class OrderService : IOrderService
             : variant.package_description;
 
         return $"{concentration} {package}".Trim();
-    }
-
-    private static OrderDto ToDto(Order order)
-    {
-        return new OrderDto
-        {
-            OrderId = order.order_id,
-            OrderNumber = order.order_number,
-            CustomerId = order.customer_id,
-            OrderStatusId = order.order_status_id,
-            OrderStatus = order.order_status?.name,
-            Subtotal = order.subtotal,
-            TaxAmount = order.tax_amount,
-            ShippingCost = order.shipping_cost,
-            DiscountAmount = order.discount_amount,
-            Total = order.total,
-            CreatedAt = order.created_at,
-            Items = order.order_items.Select(i => new OrderItemDto
-            {
-                OrderItemId = i.order_item_id,
-                ProductVariantId = i.product_variant_id,
-                Quantity = i.quantity,
-                UnitPrice = i.unit_price,
-                Subtotal = i.subtotal,
-                ProductName = i.product_name_snapshot,
-                VariantDescription = i.variant_desc_snapshot,
-                Sku = i.sku_snapshot
-            }).ToList()
-        };
     }
 }

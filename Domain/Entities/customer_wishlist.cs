@@ -1,4 +1,4 @@
-﻿namespace Core.Entities;
+﻿namespace Domain.Entities;
 
 /// <summary>
 /// Tabla puente N:M. Lista de deseos: cada cliente puede guardar múltiples variantes, y cada variante puede aparecer en múltiples listas.

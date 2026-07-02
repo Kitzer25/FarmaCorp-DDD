@@ -1,4 +1,4 @@
-﻿namespace Core.Entities;
+﻿namespace Domain.Entities;
 
 /// <summary>
 /// Métodos de pago habilitados. is_online diferencia pagos digitales de presenciales.

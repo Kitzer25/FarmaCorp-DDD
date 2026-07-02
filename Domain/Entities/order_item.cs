@@ -1,4 +1,4 @@
-﻿namespace Core.Entities;
+﻿namespace Domain.Entities;
 
 /// <summary>
 /// Líneas del pedido. Inmutables una vez creadas. Los snapshots garantizan integridad histórica aunque el producto cambie después.

@@ -1,6 +1,6 @@
-using Core.Entities;
+using Domain.Entities;
 
-namespace Core.Ports.Repositories.ERepository;
+namespace Domain.Ports.Repositories.ERepository;
 
 public interface IInventoryRepository : 
     IGRepositories<Inventory>

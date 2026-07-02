@@ -1,7 +1,7 @@
-using Core.DTO_s.Auth;
-using Core.Ports;
-using Core.Ports.Repositories;
-using Core.Ports.Services.AuthService;
+using Domain.Ports;
+using Domain.DTO_s.Auth;
+using Domain.Ports.Repositories;
+using Domain.Ports.Services.AuthService;
 using MediatR;
 
 namespace Application.UseCases.Auth.Commands;

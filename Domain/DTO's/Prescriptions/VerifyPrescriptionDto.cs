@@ -1,4 +1,4 @@
-namespace Core.DTO_s.Prescriptions;
+namespace Domain.DTO_s.Prescriptions;
 
 public class VerifyPrescriptionDto
 {

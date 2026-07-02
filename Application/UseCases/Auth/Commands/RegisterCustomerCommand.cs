@@ -1,7 +1,7 @@
-using Core.DTO_s.Auth;
-using Core.Entities;
-using Core.Ports;
-using Core.Ports.Repositories;
+using Domain.Ports;
+using Domain.DTO_s.Auth;
+using Domain.Entities;
+using Domain.Ports.Repositories;
 using Infraestructure.Adapters.Services.AuthService;
 using MediatR;
 

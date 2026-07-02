@@ -1,4 +1,4 @@
-﻿namespace Core.Entities;
+﻿namespace Domain.Entities;
 
 /// <summary>
 /// Direcciones de envío guardadas por el cliente. Un cliente puede tener varias; is_default indica la preferida.

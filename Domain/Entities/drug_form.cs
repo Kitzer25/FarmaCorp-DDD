@@ -1,4 +1,4 @@
-﻿namespace Core.Entities;
+﻿namespace Domain.Entities;
 
 /// <summary>
 /// Catálogo de formas farmacéuticas. Seed: Tableta, Cápsula, Jarabe, Suspensión, Inyectable, Crema, Gel, Parche, Gotas, Spray, Supositorio, Polvo.

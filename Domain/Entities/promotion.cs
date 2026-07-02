@@ -1,4 +1,4 @@
-﻿namespace Core.Entities;
+﻿namespace Domain.Entities;
 
 /// <summary>
 /// Descuentos y promociones con reglas de vigencia, límite de uso y monto mínimo de pedido.

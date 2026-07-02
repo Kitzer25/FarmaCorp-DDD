@@ -1,9 +1,14 @@
-using Core.Entities;
+using Domain.Entities;
 
-namespace Core.Ports.Repositories.ERepository;
+namespace Domain.Ports.Repositories.ERepository;
 
 public interface IOrderPaymentRepository : 
     IGRepositories<OrderPayment>
 {
-    
+    Task<IEnumerable<OrderPayment>> GetByOrderAsync(int orderId, CancellationToken ct);
+
+    Task<OrderPayment?> GetByTransactionReferenceAsync(string reference, CancellationToken ct);
+
+    Task<decimal> GetTotalPaidByOrderAsync(int orderId, CancellationToken ct);
+
 }

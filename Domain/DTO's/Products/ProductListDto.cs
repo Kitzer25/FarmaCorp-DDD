@@ -1,4 +1,4 @@
-namespace Core.DTO_s.Products;
+namespace Domain.DTO_s.Products;
 
 public class ProductListDto
 {

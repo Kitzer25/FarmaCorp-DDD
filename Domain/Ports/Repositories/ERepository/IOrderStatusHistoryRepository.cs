@@ -1,9 +1,9 @@
-using Core.Entities;
+using Domain.Entities;
 
-namespace Core.Ports.Repositories.ERepository;
+namespace Domain.Ports.Repositories.ERepository;
 
 public interface IOrderStatusHistoryRepository :
     IGRepositories<OrderStatusHistory>
 {
-    
+    Task<IEnumerable<OrderStatusHistory>> GetByOrderAsync(int orderId, CancellationToken ct);
 }

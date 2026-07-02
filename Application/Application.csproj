@@ -38,8 +38,6 @@
       <Folder Include="UseCases\InventoryMovementType\Querys\" />
       <Folder Include="UseCases\InventoryMovement\Commands\" />
       <Folder Include="UseCases\InventoryMovement\Querys\" />
-      <Folder Include="UseCases\Inventory\Commands\" />
-      <Folder Include="UseCases\Inventory\Querys\" />
       <Folder Include="UseCases\Laboratory\Commands\" />
       <Folder Include="UseCases\Laboratory\Querys\" />
       <Folder Include="UseCases\MeasurementUnit\Commands\" />
@@ -52,8 +50,6 @@
       <Folder Include="UseCases\OrderStatusHistory\Querys\" />
       <Folder Include="UseCases\OrderStatus\Commands\" />
       <Folder Include="UseCases\OrderStatus\Querys\" />
-      <Folder Include="UseCases\Order\Commands\" />
-      <Folder Include="UseCases\Order\Querys\" />
       <Folder Include="UseCases\PaymentMethod\Commands\" />
       <Folder Include="UseCases\PaymentMethod\Querys\" />
       <Folder Include="UseCases\PrescriptionUpload\Commands\" />
@@ -66,7 +62,6 @@
       <Folder Include="UseCases\ProductImage\Querys\" />
       <Folder Include="UseCases\ProductVariant\Commands\" />
       <Folder Include="UseCases\ProductVariant\Querys\" />
-      <Folder Include="UseCases\Product\Commands\" />
       <Folder Include="UseCases\PromotionCode\Commands\" />
       <Folder Include="UseCases\PromotionCode\Querys\" />
       <Folder Include="UseCases\Promotion\Commands\" />

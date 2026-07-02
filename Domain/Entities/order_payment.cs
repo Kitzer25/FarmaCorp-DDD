@@ -1,4 +1,4 @@
-﻿namespace Core.Entities;
+﻿namespace Domain.Entities;
 
 /// <summary>
 /// Registros de pago por pedido. Permite múltiples intentos y pagos parciales. payment_status maneja el ciclo de vida del pago.

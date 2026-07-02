@@ -1,7 +1,7 @@
-using Core.Entities;
-using Core.Ports.Repositories;
-using Core.Ports.Repositories.ERepository;
+using Domain.Entities;
+using Domain.Ports.Repositories.ERepository;
 using Infraestructure.Context;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infraestructure.Adapters.Repositories.ERepository;
 public class DiscountTypeRepository : 
@@ -10,4 +10,13 @@ public class DiscountTypeRepository :
 { 
     public DiscountTypeRepository(AppDbContext context) : base(context)
     { }  
+    
+    public async Task<DiscountType?> GetByNameAsync(string name, CancellationToken ct) =>
+        await _dbSet.AsNoTracking()
+            .FirstOrDefaultAsync(d => d.name == name, ct);
+
+    public async Task<bool> ExistsByNameAsync(string name, CancellationToken ct) =>
+        await _dbSet.AsNoTracking()
+            .AnyAsync(d => d.name == name, ct);
+
 }

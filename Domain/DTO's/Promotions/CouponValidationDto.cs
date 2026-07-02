@@ -1,4 +1,4 @@
-namespace Core.DTO_s.Promotions;
+namespace Domain.DTO_s.Promotions;
 
 public class CouponValidationDto
 {

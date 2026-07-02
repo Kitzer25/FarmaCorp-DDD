@@ -1,4 +1,4 @@
-namespace Core.DTO_s.Reports;
+namespace Domain.DTO_s.Reports;
 
 public class TopProductDto
 {

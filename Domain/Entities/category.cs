@@ -1,4 +1,4 @@
-﻿namespace Core.Entities;
+﻿namespace Domain.Entities;
 
 /// <summary>
 /// Clasificación jerárquica de medicamentos. Soporta subcategorías via auto-referencia.

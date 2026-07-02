@@ -1,4 +1,4 @@
-﻿namespace Core.Entities;
+﻿namespace Domain.Entities;
 
 /// <summary>
 /// Cabecera del pedido. Documento contable inmutable. Los montos son snapshot al momento de confirmar y NUNCA se recalculan.

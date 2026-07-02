@@ -1,13 +1,13 @@
 using System.Security.Claims;
 using API.Contracts.CustomerAddresses;
 using Application.UseCases.CustomerAddress.Commands;
-using Core.Commons;
-using Core.Ports;
+using Domain.Ports;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Core.DTO_s.CustomerAddresses;
-using Core.Ports.Repositories;
+using Domain.Commons;
+using Domain.DTO_s.CustomerAddresses;
+using Domain.Ports.Repositories;
 
 namespace API.Controllers;
 

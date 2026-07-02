@@ -1,4 +1,4 @@
-﻿namespace Core.Entities;
+﻿namespace Domain.Entities;
 
 /// <summary>
 /// Unidades de concentración y volumen. Seed: mg, ml, g, mcg, UI, %.

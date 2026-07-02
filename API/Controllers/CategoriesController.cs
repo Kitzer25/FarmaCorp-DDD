@@ -18,7 +18,7 @@ public class CategoriesController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetCategories(CancellationToken ct)
     {
-        var result = await _mediator.Send(new GetCategoriesCommand(), ct);
+        var result = await _mediator.Send(new GetCategoriesQuery(), ct);
         return Ok(result);
     }
 }

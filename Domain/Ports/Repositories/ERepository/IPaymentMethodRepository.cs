@@ -1,9 +1,16 @@
-using Core.Entities;
+using Domain.Entities;
 
-namespace Core.Ports.Repositories.ERepository;
+namespace Domain.Ports.Repositories.ERepository;
 
 public interface IPaymentMethodRepository :
     IGRepositories<PaymentMethod>
 {
-    
+    Task<PaymentMethod?> GetByNameAsync(string name, CancellationToken ct);
+
+    Task<IEnumerable<PaymentMethod>> GetAllActiveAsync(CancellationToken ct);
+
+    Task<IEnumerable<PaymentMethod>> GetOnlineMethodsAsync(CancellationToken ct);
+
+    Task<bool> ExistsByNameAsync(string name, CancellationToken ct);
+
 }
