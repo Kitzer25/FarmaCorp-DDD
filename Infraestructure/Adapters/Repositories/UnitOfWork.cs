@@ -3,6 +3,7 @@ using Domain.Ports.Repositories;
 using Domain.Ports.Repositories.ERepository;
 using Infraestructure.Adapters.Repositories.ERepository;
 using Infraestructure.Context;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Infraestructure.Adapters.Repositories;
 
@@ -10,6 +11,7 @@ public class UnitOfWork : IUnitOfWork
 {
     private readonly AppDbContext _context;
     private readonly IDictionary<Type, object> _repositories;
+    private IDbContextTransaction? _transaction;
 
     private IAuditLogRepository? _auditLogRepo;
     private IUserRepository? _userRepo;
@@ -106,8 +108,43 @@ public class UnitOfWork : IUnitOfWork
         return await _context.SaveChangesAsync(ct);
     }
 
+    public async Task BeginTransactionAsync(CancellationToken ct)
+    {
+        if (_transaction != null)
+        {
+            return;
+        }
+
+        _transaction = await _context.Database.BeginTransactionAsync(ct);
+    }
+
+    public async Task CommitTransactionAsync(CancellationToken ct)
+    {
+        if (_transaction == null)
+        {
+            return;
+        }
+
+        await _transaction.CommitAsync(ct);
+        await _transaction.DisposeAsync();
+        _transaction = null;
+    }
+
+    public async Task RollbackTransactionAsync(CancellationToken ct)
+    {
+        if (_transaction == null)
+        {
+            return;
+        }
+
+        await _transaction.RollbackAsync(ct);
+        await _transaction.DisposeAsync();
+        _transaction = null;
+    }
+
     public void Dispose()
     {
+        _transaction?.Dispose();
         _context.Dispose();
     }
 }

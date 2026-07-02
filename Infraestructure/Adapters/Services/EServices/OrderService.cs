@@ -84,55 +84,67 @@ public class OrderService : IOrderService
             created_at = DateTime.UtcNow
         };
 
-        await _unitOfWork.OrderRepo.AddAsync(order, ct);
-        await _unitOfWork.SaveChangesAsync(ct);
+        await _unitOfWork.BeginTransactionAsync(ct);
 
-        foreach (var cartItem in cart.cart_items)
+        try
         {
-            var variant = cartItem.product_variant;
-            var unitPrice = cartItem.unit_price_snapshot ?? variant.price;
-            var orderItem = new OrderItem
+            await _unitOfWork.OrderRepo.AddAsync(order, ct);
+            await _unitOfWork.SaveChangesAsync(ct);
+
+            foreach (var cartItem in cart.cart_items)
+            {
+                var variant = cartItem.product_variant;
+                var unitPrice = cartItem.unit_price_snapshot ?? variant.price;
+                var orderItem = new OrderItem
+                {
+                    order_id = order.order_id,
+                    product_variant_id = variant.product_variant_id,
+                    quantity = cartItem.quantity,
+                    unit_price = unitPrice,
+                    discount_amount = 0,
+                    subtotal = unitPrice * cartItem.quantity,
+                    product_name_snapshot = variant.product.name,
+                    variant_desc_snapshot = BuildVariantDescription(variant),
+                    sku_snapshot = variant.sku
+                };
+
+                await _unitOfWork.OrderItemRepo.AddAsync(orderItem, ct);
+            }
+
+            await _unitOfWork.OrderPaymentRepo.AddAsync(new OrderPayment
             {
                 order_id = order.order_id,
-                product_variant_id = variant.product_variant_id,
-                quantity = cartItem.quantity,
-                unit_price = unitPrice,
-                discount_amount = 0,
-                subtotal = unitPrice * cartItem.quantity,
-                product_name_snapshot = variant.product.name,
-                variant_desc_snapshot = BuildVariantDescription(variant),
-                sku_snapshot = variant.sku
-            };
+                payment_method_id = request.PaymentMethodId,
+                amount = total,
+                payment_status = "Pending",
+                created_at = DateTime.UtcNow
+            }, ct);
 
-            await _unitOfWork.OrderItemRepo.AddAsync(orderItem, ct);
+            await _unitOfWork.OrderStatusHistoryRepo.AddAsync(new OrderStatusHistory
+            {
+                order_id = order.order_id,
+                order_status_id = pendingStatusId,
+                notes = "Pedido creado desde checkout.",
+                created_at = DateTime.UtcNow
+            }, ct);
+
+            cart.is_active = false;
+            cart.updated_at = DateTime.UtcNow;
+            await _unitOfWork.CartRepo.UpdateAsync(cart.cart_id, cart, ct);
+            await _unitOfWork.SaveChangesAsync(ct);
+
+            var savedOrder = await _unitOfWork.OrderRepo.GetByIdWithDetailsAsync(order.order_id, ct)
+                ?? order;
+
+            await _unitOfWork.CommitTransactionAsync(ct);
+
+            return savedOrder.ToDto();
         }
-
-        await _unitOfWork.OrderPaymentRepo.AddAsync(new OrderPayment
+        catch
         {
-            order_id = order.order_id,
-            payment_method_id = request.PaymentMethodId,
-            amount = total,
-            payment_status = "Pending",
-            created_at = DateTime.UtcNow
-        }, ct);
-
-        await _unitOfWork.OrderStatusHistoryRepo.AddAsync(new OrderStatusHistory
-        {
-            order_id = order.order_id,
-            order_status_id = pendingStatusId,
-            notes = "Pedido creado desde checkout.",
-            created_at = DateTime.UtcNow
-        }, ct);
-
-        cart.is_active = false;
-        cart.updated_at = DateTime.UtcNow;
-        await _unitOfWork.CartRepo.UpdateAsync(cart.cart_id, cart, ct);
-        await _unitOfWork.SaveChangesAsync(ct);
-
-        var savedOrder = await _unitOfWork.OrderRepo.GetByIdWithDetailsAsync(order.order_id, ct)
-            ?? order;
-
-        return savedOrder.ToDto();
+            await _unitOfWork.RollbackTransactionAsync(ct);
+            throw;
+        }
     }
 
     public async Task<OrderDto> ChangeStatusAsync(int orderId, int statusId, int? changedByUserId, string? notes, CancellationToken ct)
