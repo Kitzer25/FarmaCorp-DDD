@@ -1,10 +1,8 @@
 using Application.UseCases.Product.Commands;
-using Core.Commons;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Core.DTO_s.AdminProducts;
-using Core.Ports.Services;
-using Core.Ports.Services.EServices;
+using Domain.Ports.Services;
+using Domain.DTO_s.AdminProducts;
 using MediatR;
 
 namespace API.Controllers;

@@ -1,8 +1,8 @@
-using Core.Commons;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Core.Ports.Services;
-using Core.Ports.Services.EServices;
+using Domain.Ports.Services;
+using Domain.Commons;
+using Domain.Ports.Services.EServices;
 
 namespace API.Controllers;
 

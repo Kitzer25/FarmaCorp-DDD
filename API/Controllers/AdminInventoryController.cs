@@ -1,12 +1,10 @@
 using System.Security.Claims;
 using Application.UseCases.Inventory.Commands;
 using Application.UseCases.Inventory.Querys;
-using Core.Commons;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Core.DTO_s.Inventory;
-using Core.Ports.Services;
-using Core.Ports.Services.EServices;
+using Domain.Ports.Services;
+using Domain.DTO_s.Inventory;
 using MediatR;
 
 namespace API.Controllers;
