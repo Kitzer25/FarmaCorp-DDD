@@ -1,9 +1,16 @@
-using Core.Entities;
+using Domain.Entities;
 
-namespace Core.Ports.Repositories.ERepository;
+namespace Domain.Ports.Repositories.ERepository;
 
 public interface ILaboratoryRepository : 
     IGRepositories<Laboratory>
 {
-    
+    Task<Laboratory?> GetByNameAsync(string name, CancellationToken ct);
+
+    Task<IEnumerable<Laboratory>> GetAllActiveAsync(CancellationToken ct);
+
+    Task<IEnumerable<Laboratory>> GetByCountryAsync(string country, CancellationToken ct);
+
+    Task<bool> ExistsByNameAsync(string name, CancellationToken ct);
+
 }

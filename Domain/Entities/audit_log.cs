@@ -1,4 +1,4 @@
-﻿namespace Core.Entities;
+﻿namespace Domain.Entities;
 
 /// <summary>
 /// Log de auditoría para acciones sensibles (cambios de precio, roles, stock). Inmutable. BIGINT por volumen de escritura. Considerar particionamiento por created_at cuando supere 5M filas.

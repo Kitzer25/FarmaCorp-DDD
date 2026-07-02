@@ -1,4 +1,4 @@
-namespace Core.DTO_s.AdminProducts;
+namespace Domain.DTO_s.AdminProducts;
 
 public class SaveProductAdminDto
 {

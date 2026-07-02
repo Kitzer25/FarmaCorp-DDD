@@ -1,4 +1,4 @@
-namespace Core.DTO_s.Orders;
+namespace Domain.DTO_s.Orders;
 
 public class OrderDto
 {

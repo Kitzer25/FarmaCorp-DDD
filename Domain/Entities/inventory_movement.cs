@@ -1,4 +1,4 @@
-﻿namespace Core.Entities;
+﻿namespace Domain.Entities;
 
 /// <summary>
 /// Historial auditado de todos los cambios de stock. Inmutable. Permite reconciliar discrepancias y generar reportes de entradas/salidas.

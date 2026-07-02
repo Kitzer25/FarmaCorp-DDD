@@ -1,4 +1,4 @@
-namespace Core.DTO_s.Cart;
+namespace Domain.DTO_s.Cart;
 
 public class CartItemRemovedDto
 {

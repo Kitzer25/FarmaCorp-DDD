@@ -1,4 +1,4 @@
-namespace Core.DTO_s.Inventory;
+namespace Domain.DTO_s.Inventory;
 
 public class CreateInventoryMovementDto
 {

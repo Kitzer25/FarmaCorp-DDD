@@ -1,4 +1,4 @@
-﻿namespace Core.Entities;
+﻿namespace Domain.Entities;
 
 /// <summary>
 /// Carritos de compra persistentes. customer_id NULL = carrito anónimo identificado por session_id. Al hacer login, el carrito anónimo se asocia al cliente.

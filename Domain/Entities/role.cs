@@ -1,4 +1,4 @@
-﻿namespace Core.Entities;
+﻿namespace Domain.Entities;
 
 /// <summary>
 /// Roles para control de acceso del personal interno. Un usuario puede tener múltiples roles via user_roles.

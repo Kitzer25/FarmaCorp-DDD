@@ -1,4 +1,4 @@
-﻿namespace Core.Entities;
+﻿namespace Domain.Entities;
 
 /// <summary>
 /// Medicamento como concepto abstracto. No se vende directamente; las variantes (product_variants) son las unidades vendibles.

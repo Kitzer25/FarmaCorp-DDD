@@ -1,4 +1,4 @@
-namespace Core.Ports.Repositories;
+namespace Domain.Ports.Repositories;
 
 public interface IGRepositories<T>
     where T : class 

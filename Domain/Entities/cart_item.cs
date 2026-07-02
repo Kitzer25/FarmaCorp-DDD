@@ -1,4 +1,4 @@
-﻿namespace Core.Entities;
+﻿namespace Domain.Entities;
 
 /// <summary>
 /// Líneas del carrito. Una por variante. El precio se recalcula al hacer checkout; unit_price_snapshot es solo referencia.

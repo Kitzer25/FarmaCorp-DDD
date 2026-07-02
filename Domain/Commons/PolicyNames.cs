@@ -1,4 +1,4 @@
-﻿namespace Core.Commons;
+﻿namespace Domain.Commons;
 
 /// <summary>
 /// Nombres de las políticas de autorización registradas en Program.cs.

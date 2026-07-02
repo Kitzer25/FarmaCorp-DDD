@@ -1,10 +1,11 @@
-using Core.DTO_s.Cart;
+using Domain.DTO_s.Cart;
+using Domain.DTO_s.Categories;
+using Domain.Entities;
+using Domain.Ports.Repositories;
 
-namespace Core.Ports.Services.EServices;
+namespace Domain.Ports.Services.EServices;
 
-public interface ICartService
+public interface ICartService : IGRepositories<Cart>
 {
-    Task<CartDto> GetActiveCartAsync(int customerId, CancellationToken ct);
-    Task<CartDto> AddItemAsync(int customerId, int productVariantId, int quantity, CancellationToken ct);
-    Task<CartDto> UpdateItemQuantityAsync(int customerId, int cartItemId, int quantity, CancellationToken ct);
+    Task<List<CategoryDto>> GetCategoriesAsync(CancellationToken ct);
 }

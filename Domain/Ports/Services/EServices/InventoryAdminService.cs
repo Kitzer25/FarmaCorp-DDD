@@ -1,8 +1,8 @@
-using Core.DTO_s.Inventory;
-using Core.Entities;
-using Core.Ports.Repositories;
+using Domain.DTO_s.Inventory;
+using Domain.Entities;
+using Domain.Ports.Repositories;
 
-namespace Core.Ports.Services.EServices;
+namespace Domain.Ports.Services.EServices;
 
 public class InventoryAdminService : IInventoryAdminService
 {

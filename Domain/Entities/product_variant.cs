@@ -1,4 +1,4 @@
-﻿namespace Core.Entities;
+﻿namespace Domain.Entities;
 
 /// <summary>
 /// Presentación específica y vendible de un medicamento. Ej: Paracetamol 500mg x30 tabletas.

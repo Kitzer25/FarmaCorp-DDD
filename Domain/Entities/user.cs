@@ -1,4 +1,4 @@
-﻿namespace Core.Entities;
+﻿namespace Domain.Entities;
 
 /// <summary>
 /// Personal interno: administradores, farmacéuticos, vendedores. Separado de customers. Accede al backoffice, no al eCommerce público.

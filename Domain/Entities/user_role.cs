@@ -1,4 +1,4 @@
-﻿namespace Core.Entities;
+﻿namespace Domain.Entities;
 
 /// <summary>
 /// Tabla puente N:M entre users y roles. Un usuario puede tener múltiples roles. Registra quién asignó el rol.

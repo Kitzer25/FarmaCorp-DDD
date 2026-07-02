@@ -1,6 +1,6 @@
-using Core.DTO_s.Promotions;
+using Domain.DTO_s.Promotions;
 
-namespace Core.Ports.Services.EServices;
+namespace Domain.Ports.Services.EServices;
 
 public interface IPromotionService
 {

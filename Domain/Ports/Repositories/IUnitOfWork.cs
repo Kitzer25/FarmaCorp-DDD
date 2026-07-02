@@ -1,6 +1,6 @@
-using Core.Ports.Repositories.ERepository;
+using Domain.Ports.Repositories.ERepository;
 
-namespace Core.Ports.Repositories;
+namespace Domain.Ports.Repositories;
 
 public interface IUnitOfWork : IDisposable
 {
@@ -9,6 +9,7 @@ public interface IUnitOfWork : IDisposable
     Task<int> SaveChangesAsync(CancellationToken ct);
     
     //Repositories
+    public IAuditLogRepository AuditLogRepo { get; }
     public IUserRepository UserRepo { get; }
     public IRoleRepository RoleRepo { get; }
 

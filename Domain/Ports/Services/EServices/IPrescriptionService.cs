@@ -1,6 +1,6 @@
-using Core.DTO_s.Prescriptions;
+using Domain.DTO_s.Prescriptions;
 
-namespace Core.Ports.Services.EServices;
+namespace Domain.Ports.Services.EServices;
 
 public interface IPrescriptionService
 {

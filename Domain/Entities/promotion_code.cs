@@ -1,4 +1,4 @@
-﻿namespace Core.Entities;
+﻿namespace Domain.Entities;
 
 /// <summary>
 /// Códigos de cupón asociados a una promoción. Ej: VERANO10. Tienen control de usos propio además del límite de la promoción.

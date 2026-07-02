@@ -1,4 +1,4 @@
-namespace Core.DTO_s.Auth;
+namespace Domain.DTO_s.Auth;
 
 public class AuthResponseDto
 {

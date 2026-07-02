@@ -1,9 +1,12 @@
-using Core.Entities;
+using Domain.Entities;
 
-namespace Core.Ports.Repositories.ERepository;
+namespace Domain.Ports.Repositories.ERepository;
 
 public interface IDiscountTypeRepository : 
     IGRepositories<DiscountType>
 {
-    
+    Task<DiscountType?> GetByNameAsync(string name, CancellationToken ct);
+
+    Task<bool> ExistsByNameAsync(string name, CancellationToken ct);
+
 }

@@ -1,6 +1,6 @@
-using Core.DTO_s.Batches;
+using Domain.DTO_s.Batches;
 
-namespace Core.Ports.Services.EServices;
+namespace Domain.Ports.Services.EServices;
 
 public interface IBatchService
 {

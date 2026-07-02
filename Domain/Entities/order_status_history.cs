@@ -1,4 +1,4 @@
-﻿namespace Core.Entities;
+﻿namespace Domain.Entities;
 
 /// <summary>
 /// Trazabilidad completa de cambios de estado del pedido. Inmutable. orders.order_status_id siempre refleja el estado actual.

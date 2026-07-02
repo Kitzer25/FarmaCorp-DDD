@@ -1,4 +1,4 @@
-﻿namespace Core.Entities;
+﻿namespace Domain.Entities;
 
 /// <summary>
 /// Fabricantes de medicamentos. Un laboratorio puede fabricar múltiples productos.
