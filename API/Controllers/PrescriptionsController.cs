@@ -1,10 +1,10 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Domain.Ports.Services;
+using Application.UseCases.Prescription.Commands;
 using Domain.Commons;
 using Domain.DTO_s.Prescriptions;
-using Domain.Ports.Services.EServices;
+using MediatR;
 
 namespace API.Controllers;
 
@@ -13,11 +13,11 @@ namespace API.Controllers;
 [Route("api/v1/prescriptions")]
 public class PrescriptionsController : ControllerBase
 {
-    private readonly IPrescriptionService _prescriptionService;
+    private readonly IMediator _mediator;
 
-    public PrescriptionsController(IPrescriptionService prescriptionService)
+    public PrescriptionsController(IMediator mediator)
     {
-        _prescriptionService = prescriptionService;
+        _mediator = mediator;
     }
 
     [HttpPost]
@@ -25,7 +25,7 @@ public class PrescriptionsController : ControllerBase
     {
         try
         {
-            var result = await _prescriptionService.CreateAsync(GetUserId(), request, ct);
+            var result = await _mediator.Send(new CreatePrescriptionCommand { CustomerId = GetUserId(), Request = request }, ct);
             return Ok(result);
         }
         catch (InvalidOperationException ex)

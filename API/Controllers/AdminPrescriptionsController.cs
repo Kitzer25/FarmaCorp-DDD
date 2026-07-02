@@ -1,10 +1,10 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Domain.Ports.Services;
+using Application.UseCases.Prescription.Commands;
 using Domain.Commons;
 using Domain.DTO_s.Prescriptions;
-using Domain.Ports.Services.EServices;
+using MediatR;
 
 namespace API.Controllers;
 
@@ -13,11 +13,11 @@ namespace API.Controllers;
 [Route(PolicyNames.PharmacistAccess)]
 public class AdminPrescriptionsController : ControllerBase
 {
-    private readonly IPrescriptionService _prescriptionService;
+    private readonly IMediator _mediator;
 
-    public AdminPrescriptionsController(IPrescriptionService prescriptionService)
+    public AdminPrescriptionsController(IMediator mediator)
     {
-        _prescriptionService = prescriptionService;
+        _mediator = mediator;
     }
 
     [HttpPatch("{prescriptionId:int}/verification")]
@@ -25,7 +25,12 @@ public class AdminPrescriptionsController : ControllerBase
     {
         try
         {
-            var result = await _prescriptionService.VerifyAsync(prescriptionId, GetUserId(), request, ct);
+            var result = await _mediator.Send(new VerifyPrescriptionCommand
+            {
+                PrescriptionId = prescriptionId,
+                UserId = GetUserId(),
+                Request = request
+            }, ct);
             return Ok(result);
         }
         catch (InvalidOperationException ex)
