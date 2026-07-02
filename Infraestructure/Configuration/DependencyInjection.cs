@@ -75,6 +75,7 @@ public static class DependencyInjection
         services.AddScoped<IDiscountTypeService, DiscountTypeService>();
         services.AddScoped<IProductImageService, ProductImageService>();
         services.AddScoped<ICustomerWishlistService, CustomerWishlistService>();
+        services.AddScoped<ICustomerAddressService, CustomerAddressService>();
         
         //Security
         services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();

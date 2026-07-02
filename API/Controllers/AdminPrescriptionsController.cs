@@ -1,7 +1,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Application.UseCases.Prescription.Commands;
+using Application.UseCases.PrescriptionUseCase.Commands;
 using Domain.Commons;
 using Domain.DTO_s.Prescriptions;
 using MediatR;
@@ -9,8 +9,8 @@ using MediatR;
 namespace API.Controllers;
 
 [ApiController]
-[Authorize(Policy = "TotalAccess")]
-[Route(PolicyNames.PharmacistAccess)]
+[Authorize(Policy = PolicyNames.TotalAccess)]
+[Route("api/v1/admin/prescriptions")]
 public class AdminPrescriptionsController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -21,22 +21,17 @@ public class AdminPrescriptionsController : ControllerBase
     }
 
     [HttpPatch("{prescriptionId:int}/verification")]
+    [ProducesResponseType(typeof(PrescriptionDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Verify(int prescriptionId, VerifyPrescriptionDto request, CancellationToken ct)
     {
-        try
+        var result = await _mediator.Send(new PATCHVerifyPrescriptionCommand
         {
-            var result = await _mediator.Send(new VerifyPrescriptionCommand
-            {
-                PrescriptionId = prescriptionId,
-                UserId = GetUserId(),
-                Request = request
-            }, ct);
-            return Ok(result);
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
+            PrescriptionId = prescriptionId,
+            UserId = GetUserId(),
+            Request = request
+        }, ct);
+        return Ok(result);
     }
 
     private int GetUserId()

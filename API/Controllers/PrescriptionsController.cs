@@ -1,7 +1,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Application.UseCases.Prescription.Commands;
+using Application.UseCases.PrescriptionUseCase.Commands;
 using Domain.Commons;
 using Domain.DTO_s.Prescriptions;
 using MediatR;
@@ -21,17 +21,12 @@ public class PrescriptionsController : ControllerBase
     }
 
     [HttpPost]
+    [ProducesResponseType(typeof(PrescriptionDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Create(CreatePrescriptionDto request, CancellationToken ct)
     {
-        try
-        {
-            var result = await _mediator.Send(new CreatePrescriptionCommand { CustomerId = GetUserId(), Request = request }, ct);
-            return Ok(result);
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
+        var result = await _mediator.Send(new POSTCreatePrescriptionCommand { CustomerId = GetUserId(), Request = request }, ct);
+        return Ok(result);
     }
 
     private int GetUserId()

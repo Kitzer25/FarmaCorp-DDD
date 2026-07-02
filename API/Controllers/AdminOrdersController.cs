@@ -1,9 +1,10 @@
 using System.Security.Claims;
-using Application.UseCases.Order.Commands;
-using Application.UseCases.Order.Querys;
+using Application.UseCases.OrderUseCase.Commands;
+using Application.UseCases.OrderUseCase.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Domain.Commons;
+using Domain.DTO_s.Orders;
 using MediatR;
 
 namespace API.Controllers;
@@ -21,13 +22,16 @@ public class AdminOrdersController : ControllerBase
     }
 
     [HttpGet("next-number")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetNextOrderNumber(CancellationToken ct)
     {
-        var orderNumber = await _mediator.Send(new GenerateOrderNumberQuery(), ct);
+        var orderNumber = await _mediator.Send(new GETGenerateOrderNumberQuery(), ct);
         return Ok(new { orderNumber });
     }
 
     [HttpPatch("{orderId:int}/status")]
+    [ProducesResponseType(typeof(OrderDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> ChangeStatus(int orderId, ChangeOrderStatusRequest request, CancellationToken ct)
     {
         if (request.StatusId <= 0)
@@ -35,21 +39,14 @@ public class AdminOrdersController : ControllerBase
             return BadRequest(new { message = "El estado es obligatorio." });
         }
 
-        try
+        var result = await _mediator.Send(new PATCHChangeOrderStatusCommand
         {
-            var result = await _mediator.Send(new ChangeOrderStatusCommand
-            {
-                OrderId = orderId,
-                StatusId = request.StatusId,
-                ChangedByUserId = GetUserId(),
-                Notes = request.Notes
-            }, ct);
-            return Ok(result);
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
+            OrderId = orderId,
+            StatusId = request.StatusId,
+            ChangedByUserId = GetUserId(),
+            Notes = request.Notes
+        }, ct);
+        return Ok(result);
     }
 
     private int? GetUserId()

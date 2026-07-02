@@ -19,9 +19,10 @@ public class AdminNotificationsController : ControllerBase
     }
 
     [HttpPost("order-confirmation/test")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> TestOrderConfirmation(TestOrderEmailRequest request, CancellationToken ct)
     {
-        await _mediator.Send(new SendTestOrderConfirmationCommand
+        await _mediator.Send(new POSTSendOrderConfirmationCommand
         {
             Email = request.Email,
             OrderNumber = request.OrderNumber,

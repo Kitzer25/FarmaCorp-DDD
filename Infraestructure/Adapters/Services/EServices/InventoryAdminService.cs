@@ -75,4 +75,26 @@ public class InventoryAdminService : IInventoryAdminService
 
         return updated.ToDto();
     }
+
+    public async Task<StockAvailabilityDto> GetAvailableStockAsync(int productVariantId, CancellationToken ct)
+    {
+        var inventory = await _unitOfWork.InventoryRepo.GetByProductVariantIdAsync(productVariantId, ct);
+
+        if (inventory == null)
+        {
+            throw new KeyNotFoundException("No existe stock registrado para la variante indicada.");
+        }
+
+        var availableQuantity = Math.Max(0, inventory.quantity_on_hand - inventory.reserved_quantity);
+
+        return new StockAvailabilityDto
+        {
+            ProductVariantId = inventory.product_variant_id,
+            QuantityOnHand = inventory.quantity_on_hand,
+            ReservedQuantity = inventory.reserved_quantity,
+            AvailableQuantity = availableQuantity,
+            MinStockLevel = inventory.min_stock_level,
+            IsLowStock = availableQuantity <= inventory.min_stock_level
+        };
+    }
 }

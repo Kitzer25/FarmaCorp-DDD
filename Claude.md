@@ -1,41 +1,62 @@
-# Proyecto — Arquitectura Hexagonal
+# API — Verificación de Controladores (Capa API)
 
-Solución dividida en varios proyectos (Ports & Adapters). Las carpetas clave
-viven en distintos proyectos dentro de la misma solución — revisa todos antes
-de generar código.
+Complementa a `Claude.md` (arquitectura hexagonal). Aplica al crear o
+normalizar Controllers en el proyecto API. No repite reglas de capas
+inferiores — ver `Claude.md` para Repositorios/Services/UseCases.
 
-## Ubicación por proyecto (ajustar nombres reales)
-- `Domain` → `Entities/`, `Ports/ERepositories/` (puertos), `/Ports/Repositories/IGRepositories.cs`, `/Ports/Repositories/IUnitOfWork.cs`, `Ports/Services/` (interfaz)
-- `Infrastructure` → implementaciones concretas de repositorios y UnitOfWork
-- `Infraestructure/Configuration/DependencyInjection` → inyección de dependencias (`AddScoped<Interfaz, Implementacion>`)
-- `Domain/DTO's/*` → carpetas requeridas para la generación de los DTO's y sus respectivos mappers(si corresponde).
+## Antes de generar código
+1. Analiza `Program.cs` (o `Startup.cs` si aplica) y extrae:
+   - Configuración de `AddAuthentication` / `AddJwtBearer` (emisor, audiencia,
+     firma, expiración, esquema).
+   - Políticas declaradas en `AddAuthorization` (`AddPolicy`, roles, claims).
+2. Las reglas de JWT viven **solo** en `Program.cs`. El controlador nunca las
+   duplica ni las reinterpreta, solo referencia la política/rol ya existente.
+3. Si el endpoint necesita una política que no existe, señálalo en el plan
+   antes de escribir código — no la inventes dentro del controlador.
 
-## Principios a aplicar al normalizar
-- SRP: una clase/método, una responsabilidad.
-- DIP: las capas superiores dependen de interfaces, no de implementaciones.
-- DRY: extraer a Services la lógica duplicada entre UseCases.
-- Nombres explícitos e intención clara; evitar métodos "todo en uno".
-- Mantener consistencia con el patrón ya usado en el resto de la solución antes de imponer uno nuevo (normalizar ≠ reescribir sin justificación).
+## Autenticación y autorización
+- Controlador protegido → `[Authorize]` a nivel de clase.
+- Restricción más específica que la del controlador → `[Authorize(Policy =
+  "...")]` o `[Authorize(Roles = "...")]` a nivel de acción.
+- Endpoint público → `[AllowAnonymous]` explícito (nunca dejarlo implícito).
+- El controlador no valida ni decodifica el token manualmente; eso es
+  responsabilidad del middleware/política configurada en `Program.cs`.
 
-## Responsabilidad de cada capa
-- **Repositorios**: solo acceso a datos. Sin lógica de negocio.
-- **UnitOfWork**: coordina transacciones y expone repositorios. Sin lógica propia.
-- **Services**: lógica de dominio/aplicación reutilizable entre casos de uso.
-- **UseCases**: orquestan un flujo concreto; acceden a datos solo vía
-  Services/UoW, nunca directo a un repositorio.
-- Toda dependencia entre capas se referencia contra **interfaces (puertos)**,
-  nunca contra la implementación concreta.
+## Etiquetas obligatorias
+- `[ApiController]` a nivel de clase.
+- `[Route("api/[controller]")]` (o el patrón ya usado en la solución).
+- `[HttpGet]`, `[HttpPost]`, `[HttpPut]`, `[HttpDelete]` explícitos por
+  acción, con ruta relativa si aplica.
+- `[ProducesResponseType(...)]` por cada código de retorno posible del
+  método (200/201/400/401/403/404/500).
+
+## Respuestas — `IActionResult`
+- Nunca devolver un objeto de dominio directo; siempre un DTO de
+  `Domain/DTO's`.
+- Éxito: `Ok()` (GET), `Created()`/`CreatedAtAction()` (POST), `NoContent()`
+  (PUT/DELETE) — según la operación, no por costumbre.
+- Error esperado de negocio: `BadRequest()`, `NotFound()`, `Unauthorized()`,
+  `Forbid()`. Nunca `StatusCode(500, ...)` para errores de negocio.
+- Excepciones no controladas se delegan al middleware global; sin
+  try/catch genérico en el controlador.
+
+## Responsabilidad del Controller
+- Solo orquesta: recibe el request, mapea a DTO, delega al
+  UseCase/Service correspondiente y traduce el resultado a `IActionResult`.
+- Sin lógica de negocio ni acceso directo a Repositorios/UnitOfWork.
+- Un método = una acción HTTP = una responsabilidad (SRP).
 
 ## Convenciones
-- Interfaz: `I{Entidad}{Rol}` — ej. `IProductoService`
-- Implementación: `{Entidad}{Rol}` — ej. `ProductoService`
-- Inyección de dependencias por constructor, siempre contra la interfaz.
+- Nombre de clase: `{Entidad}Controller`.
+- Nombre de acción: verbo + intención clara (`ObtenerPorId`, `Crear`,
+  `Actualizar`, `Eliminar`) — evitar métodos "todo en uno".
+- Inyección de dependencias por constructor, siempre contra la interfaz del
+  UseCase/Service.
 
-## Al generar o modificar código
-1. Repensa el principio de Responsabilidad Única (FUNDAMENTAL).
-2. Analiza `Entities`, `ERepositories`, `IUnitOfWork` e `IGRepositories` de cada proyecto involucrado antes de escribir nada.
-3. Si un Service ya existe, evalúa si respeta la separación de
-   responsabilidades antes de decidir mantenerlo, ajustarlo o reescribirlo.
-4. No mezclar acceso a datos dentro de Services.
-5. Evita estructurar DTO's o Mappers dentro de los servicios.
-6. Presenta primero el plan de archivos a crear/modificar (Plan Mode) antes de aplicar cambios.
+## Al generar o modificar un Controller
+1. Analiza `Program.cs` y confirma políticas/roles ya definidos.
+2. Verifica el UseCase/Service que el endpoint debe invocar.
+3. Aplica las etiquetas obligatorias y el `IActionResult` correcto por caso
+   de retorno.
+4. Presenta primero el plan de archivos a crear/modificar (Plan Mode) antes
+   de aplicar cambios — consistente con `Claude.md`.

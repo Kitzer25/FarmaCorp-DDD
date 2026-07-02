@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Application.UseCases.Promotion.Querys;
-using Application.UseCases.Promotion.Commands;
+using Application.UseCases.PromotionUseCase.Queries;
+using Application.UseCases.PromotionUseCase.Commands;
 using Domain.Commons;
 using Domain.DTO_s.Promotions;
 using MediatR;
@@ -21,14 +21,16 @@ public class AdminPromotionsController : ControllerBase
     }
 
     [HttpGet]
+    [ProducesResponseType(typeof(IEnumerable<PromotionDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetActive(CancellationToken ct)
     {
-        return Ok(await _mediator.Send(new GetActivePromotionsQuery(), ct));
+        return Ok(await _mediator.Send(new GETActivePromotionsQuery(), ct));
     }
 
     [HttpPost]
+    [ProducesResponseType(typeof(PromotionDto), StatusCodes.Status200OK)]
     public async Task<IActionResult> Create(CreatePromotionDto request, CancellationToken ct)
     {
-        return Ok(await _mediator.Send(new CreatePromotionCommand { Request = request }, ct));
+        return Ok(await _mediator.Send(new POSTCreatePromotionCommand { Request = request }, ct));
     }
 }

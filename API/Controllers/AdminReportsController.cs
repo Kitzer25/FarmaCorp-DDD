@@ -1,7 +1,10 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Application.UseCases.Report.Querys;
+using Application.UseCases.ReportUseCase.Queries;
+using Application.UseCases.CustomerWishlistUseCase.Queries;
 using Domain.Commons;
+using Domain.DTO_s.Reports;
+using Domain.DTO_s.CustomerWhislist;
 using MediatR;
 
 namespace API.Controllers;
@@ -19,8 +22,16 @@ public class AdminReportsController : ControllerBase
     }
 
     [HttpGet("dashboard")]
+    [ProducesResponseType(typeof(DashboardSummaryDto), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetDashboard(CancellationToken ct)
     {
-        return Ok(await _mediator.Send(new GetDashboardSummaryQuery(), ct));
+        return Ok(await _mediator.Send(new GETDashboardSummaryQuery(), ct));
+    }
+
+    [HttpGet("most-wishlisted")]
+    [ProducesResponseType(typeof(IEnumerable<MostWishlistedVariantDto>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetMostWishlisted([FromQuery] int top, CancellationToken ct)
+    {
+        return Ok(await _mediator.Send(new GETMostWishlistedQuery { Top = top }, ct));
     }
 }

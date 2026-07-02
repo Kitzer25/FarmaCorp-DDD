@@ -1,11 +1,12 @@
 using System.Security.Claims;
 using API.Contracts.CustomerAddresses;
-using Application.UseCases.CustomerAddress.Commands;
-using Application.UseCases.CustomerAddress.Querys;
+using Application.UseCases.CustomerAddressUseCase.Commands;
+using Application.UseCases.CustomerAddressUseCase.Querys;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Domain.Commons;
+using Domain.DTO_s.CustomerAddresses;
 
 namespace API.Controllers;
 
@@ -22,6 +23,7 @@ public class CustomerAddressesController : ControllerBase
     }
 
     [HttpGet]
+    [ProducesResponseType(typeof(IEnumerable<CustomerAddressDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetMyAddresses(CancellationToken ct)
     {
         var customerId = GetCustomerId();
@@ -31,6 +33,8 @@ public class CustomerAddressesController : ControllerBase
     }
 
     [HttpPost]
+    [ProducesResponseType(typeof(CustomerAddressDto), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Create(CustomerAddressRequest request, CancellationToken ct)
     {
         var validationError = ValidateRequest(request);
@@ -60,6 +64,9 @@ public class CustomerAddressesController : ControllerBase
     }
 
     [HttpPut("{addressId:int}")]
+    [ProducesResponseType(typeof(CustomerAddressDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Update(int addressId, CustomerAddressRequest request, CancellationToken ct)
     {
         var validationError = ValidateRequest(request);
@@ -69,71 +76,54 @@ public class CustomerAddressesController : ControllerBase
             return BadRequest(new { message = validationError });
         }
 
-        try
+        var customerId = GetCustomerId();
+        var result = await _mediator.Send(new UpdateCustomerAddressCommand
         {
-            var customerId = GetCustomerId();
-            var result = await _mediator.Send(new UpdateCustomerAddressCommand
-            {
-                CustomerId = customerId,
-                AddressId = addressId,
-                Label = request.Label,
-                RecipientName = request.RecipientName,
-                Street = request.Street,
-                District = request.District,
-                City = request.City,
-                State = request.State,
-                PostalCode = request.PostalCode,
-                Country = request.Country,
-                Phone = request.Phone,
-                IsDefault = request.IsDefault
-            }, ct);
+            CustomerId = customerId,
+            AddressId = addressId,
+            Label = request.Label,
+            RecipientName = request.RecipientName,
+            Street = request.Street,
+            District = request.District,
+            City = request.City,
+            State = request.State,
+            PostalCode = request.PostalCode,
+            Country = request.Country,
+            Phone = request.Phone,
+            IsDefault = request.IsDefault
+        }, ct);
 
-            return Ok(result);
-        }
-        catch (InvalidOperationException ex)
-        {
-            return NotFound(new { message = ex.Message });
-        }
+        return Ok(result);
     }
 
     [HttpPatch("{addressId:int}/default")]
+    [ProducesResponseType(typeof(CustomerAddressDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> SetDefault(int addressId, CancellationToken ct)
     {
-        try
+        var customerId = GetCustomerId();
+        var result = await _mediator.Send(new SetDefaultCustomerAddressCommand
         {
-            var customerId = GetCustomerId();
-            var result = await _mediator.Send(new SetDefaultCustomerAddressCommand
-            {
-                CustomerId = customerId,
-                AddressId = addressId
-            }, ct);
+            CustomerId = customerId,
+            AddressId = addressId
+        }, ct);
 
-            return Ok(result);
-        }
-        catch (InvalidOperationException ex)
-        {
-            return NotFound(new { message = ex.Message });
-        }
+        return Ok(result);
     }
 
     [HttpDelete("{addressId:int}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Delete(int addressId, CancellationToken ct)
     {
-        try
+        var customerId = GetCustomerId();
+        await _mediator.Send(new DeleteCustomerAddressCommand
         {
-            var customerId = GetCustomerId();
-            await _mediator.Send(new DeleteCustomerAddressCommand
-            {
-                CustomerId = customerId,
-                AddressId = addressId
-            }, ct);
+            CustomerId = customerId,
+            AddressId = addressId
+        }, ct);
 
-            return NoContent();
-        }
-        catch (InvalidOperationException ex)
-        {
-            return NotFound(new { message = ex.Message });
-        }
+        return NoContent();
     }
 
     private int GetCustomerId()
